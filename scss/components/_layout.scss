@@ -1,0 +1,46 @@
+@use "../utils/variable" as *;
+@use "../utils/mixin" as *;
+body {
+  overflow-x: hidden;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+html {
+  font-family: $font-primary;
+  font-size: 81.25%;
+}
+.title {
+  margin-bottom: 1rem;
+  font-size: $font-size-title;
+  font-weight: $font-weight-black;
+  &-medium {
+    font-size: $font-size-medium;
+    font-weight: $font-weight-semiBold;
+  }
+  &-big {
+    font-size: $font-size-big;
+    font-weight: $font-weight-black;
+  }
+}
+.section {
+  width: 100vw;
+
+  padding: 2rem 1rem;
+
+  &-green {
+    background-color: $c-green;
+  }
+}
+
+.content {
+  max-width: 909px;
+  margin: 0 auto;
+  &-double {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+  }
+}

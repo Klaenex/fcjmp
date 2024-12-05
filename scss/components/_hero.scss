@@ -1,0 +1,32 @@
+@use "../utils/variable" as *;
+@use "../utils/mixin" as *;
+.hero-banner {
+  width: 100%;
+  min-height: 475px;
+  height: 45vh;
+  position: relative;
+  overflow: hidden;
+  &_img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    filter: blur(1px) brightness(0.8);
+  }
+  &_text {
+    color: white;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+
+    min-width: 375px;
+    max-width: 400px;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    font-size: $font-size-big;
+    font-weight: 900;
+    @include md {
+      top: 50%;
+      left: 30%;
+    }
+  }
+}

@@ -1,0 +1,72 @@
+@use "../utils/mixin" as *;
+@use "../utils/variable" as *;
+
+.nav_custom {
+  background-color: white;
+  position: fixed;
+  top: 0;
+  left: 150vw;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @include md {
+    position: unset;
+    width: unset;
+    height: unset;
+    flex-flow: row nowrap;
+  }
+  .menu-fcjmp_basic-container {
+    .menu {
+      display: flex;
+      flex-flow: column nowrap;
+      gap: 0.7r em;
+      @include md {
+        position: relative;
+        flex-flow: row nowrap;
+      }
+      .sub-menu {
+        background-color: white;
+        margin-left: 0.7rem;
+        margin-top: 0.7rem;
+        display: flex;
+        flex-flow: column nowrap;
+        gap: 0.7rem;
+
+        @include md {
+          transition: opacity 0.3s ease, transform 0.3s ease;
+          opacity: 0;
+          transform: translateY(-10px);
+          visibility: hidden;
+          position: absolute;
+          padding: 1rem;
+          border-radius: 1rem;
+        }
+
+        a {
+          margin: 0.7rem;
+        }
+      }
+
+      a {
+        margin: 0.7rem;
+        color: black;
+        font-weight: $font-weight-bold;
+        text-decoration: none;
+      }
+    }
+  }
+  &--open {
+    left: 0vw;
+  }
+}
+
+#menu-item-32:hover {
+  .sub-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0); // Remet la position à normale
+  }
+}

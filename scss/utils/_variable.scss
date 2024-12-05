@@ -1,0 +1,32 @@
+@font-face {
+  font-family: "Montserrat";
+  src: url("../wp-content/themes/fcjmp_custom/assets/fonts/Montserrat-VariableFont_wght.ttf")
+    format("ttf");
+  font-weight: 100 900;
+}
+
+$font-primary: "Montserrat", sans-serif;
+$font-secondary: "Arial", sans-serif;
+
+$font-weight-light: 100;
+$font-weight-regular: 400;
+$font-weight-semiBold: 600;
+$font-weight-bold: 700;
+$font-weight-black: 900;
+
+$title-font-family: $font-primary;
+$text-font-family: $font-primary;
+
+$font-size-normal: 1rem;
+$font-size-medium: 1.414rem;
+$font-size-title: 2.827rem;
+$font-size-big: 3.998rem;
+
+$c-green: #18988b;
+$c-yellow: #fdc224;
+
+$screen-sm: 600px;
+$screen-md: 800px;
+$screen-lg: 1000px;
+$screen-xl: 1200px;
+$screen-custom: 1100px;

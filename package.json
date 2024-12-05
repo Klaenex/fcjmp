@@ -1,0 +1,19 @@
+{
+  "name": "fcjmp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm-run-all --parallel browser-sync sass",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "browser-sync": "browser-sync start --config ./bs-config.js",
+    "sass": "sass --style=compressed --watch ./scss:./wp-content/themes/fcjmp_custom/assets/css"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "browser-sync": "^3.0.3",
+    "npm-run-all": "^4.1.5",
+    "sass": "^1.80.3"
+  }
+}

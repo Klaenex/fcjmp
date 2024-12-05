@@ -1,0 +1,37 @@
+@use "../utils/mixin" as *;
+
+.body--noscroll {
+  overflow: hidden;
+}
+.nav_burger {
+  display: block;
+  z-index: 150;
+  cursor: pointer;
+
+  @include md {
+    display: none;
+  }
+
+  &-top,
+  &-middle,
+  &-bottom {
+    margin: 3px 0;
+    display: block;
+    width: 25px;
+    height: 2px;
+    background-color: black;
+    transition: all 0.25s ease-in-out;
+  }
+
+  &--open {
+    .nav_burger-top {
+      transform: translateY(5px) rotate(45deg);
+    }
+    .nav_burger-middle {
+      opacity: 0;
+    }
+    .nav_burger-bottom {
+      transform: translateY(-5px) rotate(-45deg);
+    }
+  }
+}

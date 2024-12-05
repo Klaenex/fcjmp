@@ -1,0 +1,24 @@
+@use "../utils/mixin" as *;
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
+  margin: 0 auto;
+
+  @include md {
+    height: 100px;
+    align-items: center;
+  }
+  @include lg {
+    width: 67.5%;
+  }
+  .logo {
+    margin: 0.7em 0;
+    z-index: 150;
+    img {
+      height: 75px;
+      width: auto;
+    }
+  }
+}

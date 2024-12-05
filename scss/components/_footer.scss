@@ -1,0 +1,51 @@
+.footer {
+  margin: 2rem auto;
+}
+
+.wrapper-footer {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.ligne {
+  width: 100vw;
+  height: auto;
+}
+.list {
+  &-partnair {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 1rem;
+    justify-content: space-evenly;
+    &-item {
+      position: relative;
+      display: flex;
+
+      height: 60px;
+      width: 80px;
+      img {
+        display: block;
+        width: 50%;
+        min-width: 90px;
+        max-height: 70px;
+        height: auto;
+        object-fit: contain;
+      }
+    }
+  }
+
+  &-item {
+    p {
+      margin: 0.5rem;
+      span {
+        margin-right: 1rem;
+      }
+    }
+  }
+}
+.wrapper-size {
+  width: 90%;
+  margin: 0 auto;
+}
