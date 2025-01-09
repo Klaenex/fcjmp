@@ -1,6 +1,6 @@
 <footer class="footer">
     <div class="wrapper-footer">
-        <p>Avec le soutien de :</p>
+        <p>Avec le soutien de : </p>
         <ul class="list list-partnair">
             <li class="list-partnair-item">
                 <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/cocof.png" alt="Logo Cocof" loading="lazy">
@@ -24,7 +24,7 @@
                 <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/forem.png" alt="Logo Forem" loading="lazy">
             </li>
         </ul>
-        <p>En partenariat avec :</p>
+        <p>Nos partenaires :</p>
         <ul class="list list-partnair">
             <li class="list-partnair-item">
                 <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/logo_SEFoP_positif.png" alt="Logo SEFoP" loading="lazy">
