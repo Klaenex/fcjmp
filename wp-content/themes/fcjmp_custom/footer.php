@@ -1,5 +1,5 @@
 <footer class="footer">
-    <div class="wrapper-footer">
+    <div class="wrapper-support">
         <p>Avec le soutien de : </p>
         <ul class="list list-partnair">
             <li class="list-partnair-item">
@@ -39,9 +39,9 @@
         <path d="M1280 5H873.474C857.139 5 841.431 11.7009 829.569 23.7163L796.428 65.2182C786.424 75.362 773.179 81 759.416 81H375.079H57.1737H0" stroke="#FDC224" stroke-width="10" stroke-miterlimit="10" vector-effect="non-scaling-stroke" />
     </svg>
 
-    <div class="wrapper-size">
+    <div class="wrapper-size wrapper-footer">
         <div>
-            <h3 class="title title-medium">Contact</h3>
+            <h3 class="title title-medium title-footer">Contact</h3>
             <ul class="list list-footer">
                 <li class="list-item">
                     <p>Du lundi au vendredi de 09h à 18h</p>
@@ -66,12 +66,12 @@
                 </li>
             </ul>
         </div>
-        <div></div>
+
         <div>
             <div>
                 <form action="https://fcjmp.us13.list-manage.com/subscribe/post?u=2362289d4c5344bda2ad19def&amp;id=0b4fdc2620&amp;f_id=00228aeaf0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
                     <div>
-                        <h2 class="title title-medium">Newsletter</h2>
+                        <h2 class="title title-medium title-footer">Newsletter</h2>
                         <div class="mc-field-group">
                             <label for="mce-EMAIL">Adresse email<span class="asterisk">*</span></label>
                             <input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required value="">

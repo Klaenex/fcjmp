@@ -24,6 +24,9 @@ html {
     font-size: $font-size-big;
     font-weight: $font-weight-black;
   }
+  &-footer {
+    color: $c-green;
+  }
 }
 .section {
   width: 100vw;
