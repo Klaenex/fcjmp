@@ -65,8 +65,8 @@
 
 .menu-item-has-children:hover {
   .sub-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0); // Remet la position à normale
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important; // Remet la position à normale
   }
 }
