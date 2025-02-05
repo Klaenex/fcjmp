@@ -5,7 +5,8 @@
   display: grid;
   grid-template-columns: repeat(1, 1fr); // 1 carte par défaut
   gap: 2em;
-
+  max-width: 80%;
+  margin: 0 auto;
   @include md {
     grid-template-columns: repeat(2, 1fr); // 2 cartes sur écrans moyens
   }
@@ -21,6 +22,7 @@
     background-color: white;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
   }
 
   &-thumbnail {
@@ -58,5 +60,7 @@
     color: white;
     text-decoration: none;
     align-self: flex-end;
+
+    margin: 1rem;
   }
 }
