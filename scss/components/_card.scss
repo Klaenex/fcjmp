@@ -2,26 +2,32 @@
 @use "../utils/mixin" as *;
 
 .card {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-evenly;
-  gap: 3em;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr); // 1 carte par défaut
+  gap: 2em;
+
+  @include md {
+    grid-template-columns: repeat(2, 1fr); // 2 cartes sur écrans moyens
+  }
+
+  @include lg {
+    grid-template-columns: repeat(4, 1fr); // 4 cartes sur grands écrans
+  }
+
   &-item {
-    width: 85%;
     overflow: hidden;
     box-shadow: 4px 4px 20px 0px rgba(0, 0, 0, 0.3);
     border-radius: 1rem;
     background-color: white;
-    @include md {
-      max-width: 210px;
-    }
+    display: flex;
+    flex-direction: column;
   }
+
   &-thumbnail {
     width: auto;
     height: 150px;
     overflow: hidden;
     display: flex;
-    gap: 3em;
     align-items: center;
     justify-content: center;
     @include md {
@@ -33,15 +39,18 @@
       height: auto;
     }
   }
+
   &-section {
     margin: 1em;
     display: flex;
-    flex-flow: column nowrap;
+    flex-direction: column;
   }
+
   &-title {
     font-size: $font-size-normal;
     font-weight: $font-weight-semiBold;
   }
+
   &-link {
     padding: 0.3em 1.1em;
     border-radius: 50px;

@@ -12,9 +12,12 @@
         <h3 class="title title-medium">Nos prochaines formations</h3>
         <?php
         $args = array(
-            'category_name' => 'Formation',
-            'posts_per_page' => 4,
-
+            'category_name'   => 'Formation', // Nom de la catégorie
+            'posts_per_page'  => 4,           // Nombre d'articles à afficher
+            'meta_key'        => 'date_formation', // Nom du champ ACF
+            'orderby'         => 'meta_value',     // Trier par la valeur du champ
+            'order'           => 'ASC',           // Trier en ordre croissant (dates proches en premier)
+            'meta_type'       => 'DATE',          // Type du champ (date)
         );
 
         $the_query = new WP_Query($args);
