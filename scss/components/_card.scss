@@ -16,7 +16,9 @@
     grid-template-columns: repeat(4, 1fr);
     max-width: none;
   }
-
+  &-duo {
+    grid-template-columns: repeat(2, 1fr);
+  }
   &-item {
     overflow: hidden;
     box-shadow: 4px 4px 20px 0px rgba(0, 0, 0, 0.3);

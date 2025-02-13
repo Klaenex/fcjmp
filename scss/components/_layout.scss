@@ -42,8 +42,11 @@ html {
   max-width: 909px;
   margin: 0 auto;
   &-double {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    @include md {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
   }
 }

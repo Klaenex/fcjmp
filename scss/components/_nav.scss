@@ -27,6 +27,9 @@
         position: relative;
         flex-flow: row nowrap;
       }
+      &-item {
+        padding: 1rem 0;
+      }
       .sub-menu {
         background-color: white;
         margin-left: 0.7rem;
@@ -47,6 +50,7 @@
 
         a {
           margin: 0.7rem;
+          padding: 0.5rem;
         }
       }
 

@@ -71,7 +71,7 @@
             ?>
 
 
-            <div class="card">
+            <div class="card card-duo">
                 <?php
                 if ($the_query->have_posts()) {
                     while ($the_query->have_posts()) {
@@ -114,7 +114,7 @@
             ?>
 
 
-            <div class="card">
+            <div class="card card-duo">
                 <?php
                 if ($the_query->have_posts()) {
                     while ($the_query->have_posts()) {
