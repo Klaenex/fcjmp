@@ -27,15 +27,15 @@
             <?php wp_nav_menu(array('theme_location' => 'main-menu')); ?>
         </nav>
     </header>
+    <main>
 
-    <?php wp_body_open(); ?>
 
-    <main id="content">
-        <!-- Le contenu principal commencera ici -->
+        <?php wp_body_open(); ?>
 
+
+
+        <?php wp_footer(); ?>
     </main>
-
-    <?php wp_footer(); ?>
 </body>
 
 </html>

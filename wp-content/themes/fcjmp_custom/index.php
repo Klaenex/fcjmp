@@ -123,7 +123,7 @@
                         <div class="card-item">
                             <?php
                             if (has_post_thumbnail()) {
-                                echo '<div class="card-thumbnail">';
+                                echo '<div class="card-thumbnail card-logo">';
                                 echo get_the_post_thumbnail(get_the_ID(), 'medium');
                                 echo '</div>';
                             } ?>

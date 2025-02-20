@@ -36,6 +36,12 @@ html {
   &-green {
     background-color: $c-green;
   }
+  &-contact {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    gap: 2rem;
+  }
 }
 
 .content {
