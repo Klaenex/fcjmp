@@ -1,3 +1,4 @@
+</main>
 <footer class="footer">
     <div class="wrapper-support">
         <p>Avec le soutien de : </p>

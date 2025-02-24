@@ -56,3 +56,23 @@ html {
     }
   }
 }
+.wrapper {
+  &-contact {
+    display: flex;
+    flex-flow: row-reverse nowrap;
+    gap: 2rem;
+  }
+}
+.list {
+  &-contact {
+    display: flex;
+    flex-flow: row;
+    li {
+      margin: 1rem;
+    }
+
+    img {
+      width: 25px;
+    }
+  }
+}

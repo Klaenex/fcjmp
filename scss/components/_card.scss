@@ -36,6 +36,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
     @include md {
       height: 103px;
     }
@@ -45,7 +46,11 @@
       height: auto;
     }
   }
-
+  &-logo {
+    height: auto;
+    max-height: 80px;
+    width: 100%;
+  }
   &-section {
     margin: 1em;
     display: flex;
