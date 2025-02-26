@@ -8,6 +8,7 @@ function fcjmp_enqueue_styles()
     // Charger le fichier index.css
     wp_enqueue_style('theme-index', get_template_directory_uri() . '/assets/css/index.css', array(), filemtime(get_template_directory() . '/assets/css/index.css'), 'all');
 }
+add_action('wp_enqueue_scripts', 'fcjmp_enqueue_styles');
 
 // Enqueuer les scripts JavaScript
 function fcjmp_enqueue_scripts()
@@ -15,9 +16,6 @@ function fcjmp_enqueue_scripts()
     // Charger le fichier JavaScript custom.js
     wp_enqueue_script('theme-custom-js', get_template_directory_uri() . '/assets/js/custom.js', array('jquery'), filemtime(get_template_directory() . '/assets/js/custom.js'), true);
 }
-
-// Ajouter les actions pour charger les styles et les scripts
-add_action('wp_enqueue_scripts', 'fcjmp_enqueue_styles');
 add_action('wp_enqueue_scripts', 'fcjmp_enqueue_scripts');
 
 // Ajouter le support pour les menus
@@ -44,8 +42,7 @@ function theme_support_custom_logo()
 }
 add_action('after_setup_theme', 'theme_support_custom_logo');
 
-
-// La Newsletter  
+// La Newsletter
 function handle_newsletter_subscription()
 {
     if (isset($_POST['newsletter_email']) && is_email($_POST['newsletter_email'])) {

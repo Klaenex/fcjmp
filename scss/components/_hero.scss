@@ -24,9 +24,20 @@
     z-index: 1;
     font-size: $font-size-big;
     font-weight: 900;
+
     @include md {
       top: 50%;
       left: 30%;
     }
+
+    &-green {
+      top: 40%;
+    }
   }
+}
+
+.hero-green {
+  min-height: 150px;
+  height: 10vh;
+  background-color: $c-green;
 }

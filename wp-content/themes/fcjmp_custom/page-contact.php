@@ -21,7 +21,6 @@ get_header();
                 <p><strong>Téléphone :</strong> <a href="tel:+3225136448">02/513.64.48</a></p>
                 <p><strong>Email :</strong> <a href="mailto:infos@fcjmp.be">infos@fcjmp.be</a></p>
                 <p><strong>Horaire :</strong> Du lundi au vendredi de 09h à 18h</p>
-
                 <ul class="list list-contact">
                     <li><a href="https://www.facebook.com/FCJMP/?locale=fr_FR"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/facebook.png" alt="" loading="lazy"></a></li>
                     <li><a href="https://www.instagram.com/fcjmp_asbl/"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/instagram.png" alt="" loading="lazy"></a></li>
@@ -35,10 +34,5 @@ get_header();
     </div>
 
 </section>
-
-
-
-
-
 
 <?php get_footer(); ?>

@@ -47,9 +47,13 @@
     }
   }
   &-logo {
-    height: auto;
     max-height: 80px;
     width: 100%;
+    img {
+      height: 100%;
+      width: auto;
+      padding-top: 1em;
+    }
   }
   &-section {
     margin: 1em;

@@ -88,8 +88,9 @@
 
                                 <h2 class="card-title"> <?php echo get_the_title(); ?> </h2>
 
-                                <a href="<?php echo get_the_permalink(); ?>" rel="noopener noreferrer" class="card-link">Lire l'article</a>
+
                             </div>
+                            <a href="<?php echo get_the_permalink(); ?>" rel="noopener noreferrer" class="card-link">Lire l'article</a>
                         </div>
                 <?php
                     }
@@ -109,11 +110,8 @@
                 'posts_per_page' => 4,
 
             );
-
             $the_query = new WP_Query($args);
             ?>
-
-
             <div class="card card-duo">
                 <?php
                 if ($the_query->have_posts()) {
@@ -128,11 +126,9 @@
                                 echo '</div>';
                             } ?>
                             <div class="card-section">
-
                                 <h2 class="card-title"> <?php echo get_the_title(); ?> </h2>
-
-                                <a href="<?php echo get_the_permalink(); ?>" rel="noopener noreferrer" class="card-link">Lire l'article</a>
                             </div>
+                            <a href="<?php echo get_the_permalink(); ?>" rel="noopener noreferrer" class="card-link">Vers l'offre</a>
                         </div>
                 <?php
                     }
