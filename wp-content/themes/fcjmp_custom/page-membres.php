@@ -26,16 +26,20 @@ $apiKey = $_ENV['API_MONDAY'];
 
         async function fetchMembers() {
             const query = `
-                query {
-                    boards(ids: [${boardId}]) {
+               query {
+                boards(ids: "${boardId}") {
+                    items_page {
+                    cursor
                         items {
+                            id
                             name
-                            column_values {
-                                title
-                                text
+                            subitems {
+                            id
+                            name
                             }
                         }
                     }
+                  }
                 }
             `;
 
@@ -67,23 +71,24 @@ $apiKey = $_ENV['API_MONDAY'];
             }
         }
 
-        function displayMembers(members) {
-            const memberList = document.getElementById("memberList");
-            if (!memberList) return;
 
-            memberList.innerHTML = "";
-            members.forEach((member) => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${member.name}</td>
-                    <td>${member.column_values[2]?.text || ""}</td> <!-- Adaptez l'index selon votre configuration -->
-                    <td>${member.column_values[3]?.text || ""}</td>
-                    <td>${member.column_values[4]?.text || ""}</td>
-                    <td>${member.column_values[5]?.text || ""}</td>
-                `;
-                memberList.appendChild(row);
-            });
-        }
+        // function displayMembers(members) {
+        //     const memberList = document.getElementById("memberList");
+        //     if (!memberList) return;
+
+        //     memberList.innerHTML = "";
+        //     members.forEach((member) => {
+        //         const row = document.createElement("tr");
+        //         row.innerHTML = `
+        //             <td>${member.name}</td>
+        //             <td>${member.column_values[2]?.text || ""}</td> <!-- Adaptez l'index selon votre configuration -->
+        //             <td>${member.column_values[3]?.text || ""}</td>
+        //             <td>${member.column_values[4]?.text || ""}</td>
+        //             <td>${member.column_values[5]?.text || ""}</td>
+        //         `;
+        //         memberList.appendChild(row);
+        //     });
+        // }
 
         fetchMembers();
     });

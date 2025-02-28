@@ -1,40 +1,6 @@
 </main>
 <footer class="footer">
-    <div class="wrapper-support">
-        <p>Avec le soutien de : </p>
-        <ul class="list list-partnair">
-            <li class="list-partnair-item">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/cocof.png" alt="Logo Cocof" loading="lazy">
-            </li>
-            <li class="list-partnair-item">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/actiris.png" alt="Logo Actiris" loading="lazy">
-            </li>
-            <li class="list-partnair-item">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/fwb.png" alt="Logo Fédération Wallonie-Bruxelles" loading="lazy">
-            </li>
-            <li class="list-partnair-item">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/bxl-cap.png" alt="Logo Bruxelles-Capitale" loading="lazy">
-            </li>
-            <li class="list-partnair-item">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/one.png" alt="Logo ONE" loading="lazy">
-            </li>
-            <li class="list-partnair-item">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/wallonie.png" alt="Logo Wallonie" loading="lazy">
-            </li>
-            <li class="list-partnair-item">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/forem.png" alt="Logo Forem" loading="lazy">
-            </li>
-        </ul>
-        <p>Nos partenaires :</p>
-        <ul class="list list-partnair">
-            <li class="list-partnair-item">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/logo_SEFoP_positif.png" alt="Logo SEFoP" loading="lazy">
-            </li>
-            <li class="list-partnair-item">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/relief.png" alt="Logo Relief" loading="lazy">
-            </li>
-        </ul>
-    </div>
+
 
     <svg class="ligne" viewBox="0 0 1280 86" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M1280 5H873.474C857.139 5 841.431 11.7009 829.569 23.7163L796.428 65.2182C786.424 75.362 773.179 81 759.416 81H375.079H57.1737H0" stroke="#FDC224" stroke-width="10" stroke-miterlimit="10" vector-effect="non-scaling-stroke" />
@@ -62,8 +28,43 @@
                 <li class="list-item">
                     <p>
                         <img src="<?php echo get_template_directory_uri(); ?>/assets/img/maps.svg" alt="Icône Localisation" loading="lazy">
-                        Rue Saint Ghislain 26, 1000 Bruxelles
+                        Rue Saint Ghislain 20, 1000 Bruxelles
                     </p>
+                </li>
+            </ul>
+        </div>
+        <div class="wrapper-support">
+            <p>Avec le soutien de : </p>
+            <ul class="list list-partnair">
+                <li class="list-partnair-item">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/cocof.png" alt="Logo Cocof" loading="lazy">
+                </li>
+                <li class="list-partnair-item">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/actiris.png" alt="Logo Actiris" loading="lazy">
+                </li>
+                <li class="list-partnair-item">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/fwb.png" alt="Logo Fédération Wallonie-Bruxelles" loading="lazy">
+                </li>
+                <li class="list-partnair-item">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/bxl-cap.png" alt="Logo Bruxelles-Capitale" loading="lazy">
+                </li>
+                <li class="list-partnair-item">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/one.png" alt="Logo ONE" loading="lazy">
+                </li>
+                <li class="list-partnair-item">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/wallonie.png" alt="Logo Wallonie" loading="lazy">
+                </li>
+                <li class="list-partnair-item">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/forem.png" alt="Logo Forem" loading="lazy">
+                </li>
+            </ul>
+            <p>Nos partenaires :</p>
+            <ul class="list list-partnair">
+                <li class="list-partnair-item">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/logo_SEFoP_positif.png" alt="Logo SEFoP" loading="lazy">
+                </li>
+                <li class="list-partnair-item">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/relief.png" alt="Logo Relief" loading="lazy">
                 </li>
             </ul>
         </div>
@@ -74,7 +75,7 @@
                     <div>
                         <h2 class="title title-medium title-footer">Newsletter</h2>
                         <div class="mc-field-group">
-                            <label for="mce-EMAIL">Adresse email<span class="asterisk">*</span></label>
+                            <label for="mce-EMAIL">Email<span class="asterisk">*</span></label>
                             <input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required value="">
                         </div>
                         <div id="mce-responses" class="clear foot">
@@ -86,7 +87,7 @@
                         </div>
                         <div class="optionalParent">
                             <div class="clear foot">
-                                <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="button" value="Subscribe">
+                                <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="button" value="S'inscrire">
                                 <p style="margin: 0px auto;">
                                     <a href="http://eepurl.com/i4DdCw" title="Avec Mailchimp, les campagnes de marketing par e-mail sont un jeu d'enfant">
                                         <span style="display: inline-block; background-color: transparent; border-radius: 4px;"></span>

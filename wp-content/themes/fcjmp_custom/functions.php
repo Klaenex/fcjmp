@@ -54,3 +54,26 @@ function handle_newsletter_subscription()
 }
 add_action('admin_post_nopriv_subscribe_newsletter', 'handle_newsletter_subscription');
 add_action('admin_post_subscribe_newsletter', 'handle_newsletter_subscription');
+
+
+// Redirection après connexion
+function custom_login_redirect($redirect_to, $request, $user)
+{
+    if (isset($user->roles) && is_array($user->roles)) {
+        if (in_array('administrator', $user->roles)) {
+            return admin_url();
+        } else {
+            return home_url(); // Redirige vers la page d'accueil
+        }
+    }
+    return $redirect_to;
+}
+add_filter('login_redirect', 'custom_login_redirect', 10, 3);
+
+// Redirection après déconnexion
+function custom_logout_redirect()
+{
+    wp_redirect(home_url());
+    exit();
+}
+add_action('wp_logout', 'custom_logout_redirect');
