@@ -26,7 +26,7 @@ get_header();
         <?php
         $args = array(
             'category_name' => 'actualité', // Assurez-vous que le slug de la catégorie est correct
-            'posts_per_page' => 10,
+            'posts_per_page' => 12,
             'paged' => get_query_var('paged')
         );
 
