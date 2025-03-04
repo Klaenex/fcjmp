@@ -147,32 +147,27 @@ $apiKey = $_ENV['API_MONDAY'];
 
         <h2>Bruxelles</h2>
         <ul id="memberListBruxelles">
-            <!-- Les membres de Bruxelles seront affichés ici -->
+
         </ul>
 
         <h2>Hainaut</h2>
         <ul id="memberListHainaut">
-            <!-- Les membres de Hainaut seront affichés ici -->
         </ul>
 
         <h2>Brabant Wallon</h2>
         <ul id="memberListBrabantWallon">
-            <!-- Les membres de Brabant Wallon seront affichés ici -->
         </ul>
 
         <h2>Liège</h2>
         <ul id="memberListLiege">
-            <!-- Les membres de Liège seront affichés ici -->
         </ul>
 
         <h2>Luxembourg</h2>
         <ul id="memberListLuxembourg">
-            <!-- Les membres de Luxembourg seront affichés ici -->
         </ul>
 
         <h2>Namur</h2>
         <ul id="memberListNamur">
-            <!-- Les membres de Namur seront affichés ici -->
         </ul>
     </div>
 </section>
