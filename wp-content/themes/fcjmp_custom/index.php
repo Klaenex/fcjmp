@@ -5,8 +5,13 @@
     <img class="hero-banner_img" src="<?php echo get_template_directory_uri(); ?>/assets/img/Bracelet%20PALM%20fcjmp.jpg" alt="Bracelet PALM FCJMP">
     <h2 class="hero-banner_text">Ensemble pour l'égalité des chances</h2>
 </div>
+<div class="content">
+    <p class="text-big">La FCJMP est une <strong>Organisation de jeunesse</strong> pluraliste, fédérant des <strong>Maisons de Jeunes</strong>, des <strong>Centres de Rencontre et d’hébergement</strong> et des <strong>Centres d’Expression Culturelle</strong>, dans une perspective d’<strong>Egalité des Chances.</strong></p>
 
-<section id="formation" class="section section-formation">
+
+    <a class="button button-bigtext">En savoir plus ?</a>
+</div>
+<section id="formation" class="section section-formation section-green">
     <div class="content">
         <h2 class="title">Formations</h2>
         <h3 class="title title-medium">Nos prochaines formations</h3>
@@ -55,7 +60,7 @@
 
 </section>
 
-<section class="section section-green">
+<section class="section">
     <div class="content content-double">
         <div>
             <h2 class="title">Actualités</h2>

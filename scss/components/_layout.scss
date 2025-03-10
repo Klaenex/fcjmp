@@ -46,7 +46,7 @@ html {
 
 .content {
   max-width: 909px;
-  margin: 0 auto;
+  margin: 1em auto;
   &-double {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
@@ -79,4 +79,16 @@ html {
 article {
   max-width: 909px;
   margin: 0 auto;
+}
+
+.text-big {
+  font-weight: $font-weight-semiBold;
+  font-size: $font-size-medium;
+  text-align: center;
+  margin: 1.5em 1em;
+  strong {
+    font-style: italic;
+    font-weight: $font-weight-black;
+    color: $c-green;
+  }
 }
