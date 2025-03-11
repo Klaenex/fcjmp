@@ -28,6 +28,13 @@ html {
     color: $c-green;
   }
 }
+
+.logo {
+  &-member {
+    width: 25px;
+  }
+}
+
 .section {
   width: 100vw;
 
@@ -59,11 +66,13 @@ html {
 .wrapper {
   &-contact {
     display: flex;
-    flex-flow: row-reverse nowrap;
+    flex-flow: column nowrap;
     gap: 2rem;
   }
 }
 .list {
+  &-member {
+  }
   &-contact {
     display: flex;
     flex-flow: row;

@@ -25,6 +25,10 @@
         </div>
         <nav class="nav_custom">
             <?php wp_nav_menu(array('theme_location' => 'main-menu')); ?>
+
+            <a class="button">
+                membres
+            </a>
         </nav>
     </header>
     <main>

@@ -1,6 +1,6 @@
 <?php
 /*
-Template Name: Page des Membres
+Template Name: Membres
 */
 
 get_header();
@@ -96,19 +96,30 @@ $apiKey = $_ENV['API_MONDAY'];
             memberListLuxembourg.innerHTML = "";
             memberListNamur.innerHTML = "";
 
-            let i = 0;
             members.forEach((member) => {
-                i++;
+
                 console.log("Processing member:", member);
                 const listItem = document.createElement("li");
                 listItem.innerHTML = `
-                    <strong>${i}. ${member.name}</strong><br>
-                    Email: ${member.column_values[1]?.text || "N/A"}<br>
-                    Localisation: ${member.column_values[2]?.text || "N/A"}<br>
-                    Téléphone: ${member.column_values[3]?.text || "N/A"}<br>
-                    Instagram: ${member.column_values[4]?.text || "N/A"}<br>
-                    Facebook: ${member.column_values[5]?.text || "N/A"}
-                `;
+                <div class="card-item">
+                    <strong class="card-title">${member.name}</strong>
+                    
+                    <a href="mailto:${member.column_values[1]?.text || "N/A"}">
+                        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/mail.svg" class="logo logo-member" alt="Icône Email" loading="lazy">
+                    </a>
+
+                    Localisation: ${member.column_values[2]?.text || "N/A"}
+
+                    Téléphone: ${member.column_values[3]?.text || "N/A"}
+                    
+                    <a href="${member.column_values[4]?.text || "N/A"}">
+                        <img class="logo logo-member" src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/instagram.png" alt="" loading="lazy">
+                    </a> 
+
+                    <a href="${member.column_values[5]?.text || "N/A"}">
+                        <img class="logo logo-member" src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/facebook.png" alt="" loading="lazy">
+                    </a> 
+                </div>`;
 
                 // Vérifiez si la valeur est un nombre avant de trier
                 const region = member.column_values[6]?.text;
@@ -143,10 +154,10 @@ $apiKey = $_ENV['API_MONDAY'];
 
 <section class="section">
     <div class="content">
-        <h1>Membres de la FCJMP</h1>
+        <h1 class="title title-big">Nos membres</h1>
 
         <h2>Bruxelles</h2>
-        <ul id="memberListBruxelles">
+        <ul id="memberListBruxelles" class=" member-list">
 
         </ul>
 
