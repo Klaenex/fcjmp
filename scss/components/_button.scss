@@ -6,8 +6,10 @@
   outline: none;
   border-radius: 30px;
   border: none;
-  padding: 0.7em 2em;
+  padding: 0.5em 1.5em;
   cursor: pointer;
+  color: white;
+  font-weight: $font-weight-semiBold;
   &-bigtext {
     font-size: $font-size-medium;
     font-weight: $font-weight-black;
@@ -16,5 +18,10 @@
     display: block;
     width: fit-content;
     margin: 0 auto;
+  }
+
+  &-menu {
+    margin-left: 3em;
+    text-decoration: none;
   }
 }

@@ -26,9 +26,17 @@
         <nav class="nav_custom">
             <?php wp_nav_menu(array('theme_location' => 'main-menu')); ?>
 
-            <a class="button">
-                membres
-            </a>
+
+            <?php if (!is_user_logged_in()): ?>
+                <a class="button button-menu" href="<?php echo wp_login_url(); ?>">
+                    Membres
+                </a>
+            <?php else : ?>
+                <a class="button button-menu" href="<?php echo wp_logout_url(home_url()); ?>">
+                    Déconnexion
+                </a>
+            <?php endif; ?>
+
         </nav>
     </header>
     <main>
