@@ -51,7 +51,7 @@ get_header();
                         } ?>
                         <div class="card-section">
                             <h2 class="card-title"><?php echo get_the_title(); ?></h2>
-                            <p><?php the_excerpt(); ?></p>
+
 
                         </div>
                         <a href="<?php echo get_the_permalink(); ?>" rel="noopener noreferrer" class="card-link">Lire l'article</a>
