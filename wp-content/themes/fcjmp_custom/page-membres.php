@@ -24,31 +24,25 @@ $apiKey = $_ENV['API_MONDAY'];
 
         const boardId = "3180263669";
         const limitQuery = 100;
-        const imgId = "file_mknpca6";
 
         async function fetchMembers() {
             const query = `
-                query {
-                    complexity {
-                        query
-                        before
-                        after
-                    }
-                    boards(ids: [${boardId}]) {
-                        items_page (limit:${limitQuery}){
-                            items {
-                                name
-                                column_values(
-                                    ids: ["texte", "email", "location", "phone", "link_mknht68g", "link_mknhjhpb", "numeric_mknpawtj"]
-                                ) {
-                                    id
-                                    text
-                                }
+            query {
+                boards(ids: [${boardId}]) {
+                    items_page (limit:${limitQuery}){
+                        items {
+                            name
+                            column_values(
+                                ids: ["texte", "email", "location", "phone", "link_mknht68g", "link_mknhjhpb", "numeric_mknpawtj","file_mknpca6"]
+                            ) {
+                                id
+                                text
                             }
                         }
                     }
                 }
-            `;
+            }
+        `;
 
             try {
                 const response = await fetch("https://api.monday.com/v2", {
@@ -61,12 +55,11 @@ $apiKey = $_ENV['API_MONDAY'];
                         query
                     }),
                 });
-                console.log(response);
 
                 const data = await response.json();
                 console.log("Data received:", data.data);
 
-                if (data.data && data.data.boards && data.data.boards.length > 0) {
+                if (data.data && data.data.boards.length > 0) {
                     displayMembers(data.data.boards[0].items_page.items);
                 } else {
                     console.error("No data found or invalid data structure.");
@@ -77,74 +70,45 @@ $apiKey = $_ENV['API_MONDAY'];
         }
 
         function displayMembers(members) {
-            const memberListBruxelles = document.getElementById("memberListBruxelles");
-            const memberListHainaut = document.getElementById("memberListHainaut");
-            const memberListBrabantWallon = document.getElementById("memberListBrabantWallon");
-            const memberListLiege = document.getElementById("memberListLiege");
-            const memberListLuxembourg = document.getElementById("memberListLuxembourg");
-            const memberListNamur = document.getElementById("memberListNamur");
+            const regions = {
+                "1": document.getElementById("memberListBruxelles"),
+                "2": document.getElementById("memberListHainaut"),
+                "3": document.getElementById("memberListBrabantWallon"),
+                "4": document.getElementById("memberListLiege"),
+                "5": document.getElementById("memberListLuxembourg"),
+                "6": document.getElementById("memberListNamur")
+            };
 
-            if (!memberListBruxelles || !memberListHainaut || !memberListBrabantWallon || !memberListLiege || !memberListLuxembourg || !memberListNamur) {
-                console.error("One or more member lists are not found in the DOM.");
-                return;
-            }
-
-            memberListBruxelles.innerHTML = "";
-            memberListHainaut.innerHTML = "";
-            memberListBrabantWallon.innerHTML = "";
-            memberListLiege.innerHTML = "";
-            memberListLuxembourg.innerHTML = "";
-            memberListNamur.innerHTML = "";
+            Object.values(regions).forEach(list => list.innerHTML = "");
 
             members.forEach((member) => {
+                const region = member.column_values[6]?.text;
+                if (!region || !regions[region]) return;
 
-                console.log("Processing member:", member);
+
+                const niveauMJ = member.column_values[0]?.text;
+                const email = member.column_values[1]?.text;
+                const adress = member.column_values[2]?.text;
+                const phone = member.column_values[3]?.text;
+                const instagram = member.column_values[4]?.text;
+                const facebook = member.column_values[5]?.text;
+                const logo = member.column_values[6]?.text;
+
+
+                console.log(member)
+
                 const listItem = document.createElement("li");
                 listItem.innerHTML = `
                 <div class="card-item">
                     <strong class="card-title">${member.name}</strong>
-                    
-                    <a href="mailto:${member.column_values[1]?.text || "N/A"}">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/mail.svg" class="logo logo-member" alt="Icône Email" loading="lazy">
-                    </a>
-
-                    Localisation: ${member.column_values[2]?.text || "N/A"}
-
-                    Téléphone: ${member.column_values[3]?.text || "N/A"}
-                    
-                    <a href="${member.column_values[4]?.text || "N/A"}">
-                        <img class="logo logo-member" src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/instagram.png" alt="" loading="lazy">
-                    </a> 
-
-                    <a href="${member.column_values[5]?.text || "N/A"}">
-                        <img class="logo logo-member" src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/facebook.png" alt="" loading="lazy">
-                    </a> 
+                   
+                    ${phone ? `<p>Téléphone: ${phone}</p>` : ''}
+                    ${instagram ? `<a href="${instagram}"><img class="logo logo-member" src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/instagram.png" alt="Instagram" loading="lazy"></a>` : ''}
+                    ${facebook ? `<a href="${facebook}"><img class="logo logo-member" src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/facebook.png" alt="Facebook" loading="lazy"></a>` : ''}
+                    ${email ? `<a href="mailto:${email}"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/mail.svg" class="logo logo-member" alt="Icône Email" loading="lazy"></a>` : ''}
                 </div>`;
 
-                // Vérifiez si la valeur est un nombre avant de trier
-                const region = member.column_values[6]?.text;
-                if (region && !isNaN(region)) {
-                    switch (region) {
-                        case "1":
-                            memberListBruxelles.appendChild(listItem);
-                            break;
-                        case "2":
-                            memberListHainaut.appendChild(listItem);
-                            break;
-                        case "3":
-                            memberListBrabantWallon.appendChild(listItem);
-                            break;
-                        case "4":
-                            memberListLiege.appendChild(listItem);
-                            break;
-                        case "5":
-                            memberListLuxembourg.appendChild(listItem);
-                            break;
-                        case "6":
-                            memberListNamur.appendChild(listItem);
-                            break;
-                    }
-                }
+                regions[region].appendChild(listItem);
             });
         }
 
@@ -152,37 +116,32 @@ $apiKey = $_ENV['API_MONDAY'];
     });
 </script>
 
-<section class="section">
-    <div class="content">
+<section class="section section-green">
+    <div class="section-green_wrap">
         <h1 class="title title-big">Nos membres</h1>
-
-        <h2>Bruxelles</h2>
-        <ul id="memberListBruxelles" class=" member-list">
-
-        </ul>
-
-        <h2>Hainaut</h2>
-        <ul id="memberListHainaut">
-        </ul>
-
-        <h2>Brabant Wallon</h2>
-        <ul id="memberListBrabantWallon">
-        </ul>
-
-        <h2>Liège</h2>
-        <ul id="memberListLiege">
-        </ul>
-
-        <h2>Luxembourg</h2>
-        <ul id="memberListLuxembourg">
-        </ul>
-
-        <h2>Namur</h2>
-        <ul id="memberListNamur">
-        </ul>
     </div>
 </section>
 
-<?php
-get_footer();
-?>
+<section class="section">
+    <div class="content">
+        <h2>Bruxelles</h2>
+        <ul id="memberListBruxelles" class="list-member"></ul>
+
+        <h2>Hainaut</h2>
+        <ul id="memberListHainaut" class="list-member"></ul>
+
+        <h2>Brabant Wallon</h2>
+        <ul id="memberListBrabantWallon" class="list-member"></ul>
+
+        <h2>Liège</h2>
+        <ul id="memberListLiege" class="list-member"></ul>
+
+        <h2>Luxembourg</h2>
+        <ul id="memberListLuxembourg" class="list-member"></ul>
+
+        <h2>Namur</h2>
+        <ul id="memberListNamur" class="list-member"></ul>
+    </div>
+</section>
+
+<?php get_footer(); ?>

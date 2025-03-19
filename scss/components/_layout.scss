@@ -23,9 +23,13 @@ html {
   &-big {
     font-size: $font-size-big;
     font-weight: $font-weight-black;
+    color: white;
   }
   &-footer {
     color: $c-green;
+  }
+  &-outils {
+    margin-bottom: 3rem;
   }
 }
 
@@ -42,6 +46,10 @@ html {
 
   &-green {
     background-color: $c-green;
+    &_wrap {
+      max-width: 909px;
+      margin: 0 auto;
+    }
   }
   &-contact {
     display: flex;
@@ -68,10 +76,37 @@ html {
     display: flex;
     flex-flow: column nowrap;
     gap: 2rem;
+    @include md {
+      flex-direction: row;
+    }
+  }
+  .wrapper-text {
+    max-width: 400px;
+    p {
+      margin-bottom: 3em;
+    }
+  }
+  &-outils {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    gap: 2rem;
+    margin: 4rem 0;
+    &:nth-child(even) {
+      flex-flow: row-reverse nowrap;
+    }
+
+    img {
+      max-width: 325px;
+      height: auto;
+    }
   }
 }
 .list {
   &-member {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3rem;
   }
   &-contact {
     display: flex;
@@ -99,5 +134,13 @@ article {
     font-style: italic;
     font-weight: $font-weight-black;
     color: $c-green;
+  }
+}
+gmp-map {
+  width: 100%;
+  height: 320px;
+  @include md {
+    width: 400px;
+    height: 320px;
   }
 }

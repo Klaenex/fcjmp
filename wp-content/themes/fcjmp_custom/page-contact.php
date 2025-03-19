@@ -11,10 +11,13 @@ $googleMapsApiKey = $_ENV['API_MAPS'];
 get_header();
 ?>
 <script async src="https://maps.googleapis.com/maps/api/js?key=<?php echo $googleMapsApiKey; ?>&callback=console.debug&libraries=maps,marker&v=beta"></script>
-
+<section class="section section-green ">
+    <div class="section-green_wrap">
+        <h1 class="title title-big">Contact</h1>
+    </div>
+</section>
 <section class="section section-contact">
     <div class="content content-contact">
-        <h1 class="title tile-big">Contact</h1>
         <div class="wrapper wrapper-contact">
             <div class="contact-info">
                 <p><strong>Adresse :</strong> Rue Saint-Ghislain 26, 1000 Bruxelles, Belgique</p>
