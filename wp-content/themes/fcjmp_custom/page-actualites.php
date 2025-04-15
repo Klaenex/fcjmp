@@ -78,7 +78,6 @@ $paged = get_query_var('paged') ? get_query_var('paged') : 1;
                 endwhile;
                 ?>
                 <div class="pagination">
-
                     <?php
                     echo paginate_links(array(
                         'base'         => str_replace(999999999, '%#%', esc_url(get_pagenum_link(999999999))),
@@ -90,12 +89,10 @@ $paged = get_query_var('paged') ? get_query_var('paged') : 1;
                         'end_size'     => 2,
                         'mid_size'     => 1,
                         'prev_next'    => true,
-                        'prev_text'    => sprintf('&laquo; %s', __('Précédents', 'text-domain')),
-                        'next_text'    => sprintf('%s &raquo;', __('Suivants', 'text-domain')),
+                        'prev_text'    => sprintf('', __('<<', 'text-domain')),
+                        'next_text'    => sprintf('', __('>>', 'text-domain')),
                     ));
                     ?>
-
-
                 </div>
             <?php
                 wp_reset_postdata();

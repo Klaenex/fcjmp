@@ -21,8 +21,12 @@
   }
 
   &-menu {
-    margin-left: 3em;
+    margin-top: 3em;
     text-decoration: none;
+    @include md {
+      margin-top: 0;
+      margin-left: 3em;
+    }
   }
   &-outils {
     margin-top: 3rem;
