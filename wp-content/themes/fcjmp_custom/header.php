@@ -9,6 +9,8 @@
     <?php wp_head(); ?>
 </head>
 
+
+
 <body>
     <header class="header">
         <?php if (is_front_page()) : ?>
@@ -36,7 +38,6 @@
                     Déconnexion
                 </a>
             <?php endif; ?>
-
         </nav>
     </header>
     <main>
@@ -49,5 +50,8 @@
         <?php wp_footer(); ?>
 
 </body>
+
+
+
 
 </html>
