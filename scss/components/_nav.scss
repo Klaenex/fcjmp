@@ -23,8 +23,10 @@
     .menu {
       display: flex;
       flex-flow: column nowrap;
-      gap: 0.7r em;
+      gap: 0.7rem;
+
       @include md {
+        place-items: center;
         position: relative;
         flex-flow: row nowrap;
       }
@@ -67,11 +69,34 @@
     left: 0vw;
   }
 }
+.menu-item-has-children a {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+.chevron-icon {
+  display: flex;
+  flex-flow: column;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+  img {
+    transition: transform 0.3s ease;
+    transform: translateY(-20px);
+  }
+}
 
 .menu-item-has-children:hover {
   .sub-menu {
     opacity: 1 !important;
     visibility: visible !important;
-    transform: translateY(0) !important; // Remet la position à normale
+    transform: translateY(0) !important;
+  }
+  .chevron-icon {
+    img {
+      transform: translateY(0px);
+    }
   }
 }

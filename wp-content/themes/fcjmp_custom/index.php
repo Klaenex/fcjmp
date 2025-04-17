@@ -5,10 +5,8 @@
     <img class="hero-banner_img" src="<?php echo get_template_directory_uri(); ?>/assets/img/Bracelet%20PALM%20fcjmp.jpg" alt="Bracelet PALM FCJMP">
     <h2 class="hero-banner_text">Ensemble pour l'égalité des chances</h2>
 </div>
-<div class="content">
+<div class="content content-margin">
     <p class="text-big">La FCJMP est une <strong>Organisation de jeunesse</strong> pluraliste, fédérant des <strong>Maisons de Jeunes</strong>, des <strong>Centres de Rencontre et d’hébergement</strong> et des <strong>Centres d’Expression Culturelle</strong>, dans une perspective d’<strong>Egalité des Chances.</strong></p>
-
-
     <a class="button button-bigtext">En savoir plus ?</a>
 </div>
 <section id="formation" class="section section-formation section-green">
@@ -70,7 +68,7 @@
             <?php
             $args = array(
                 'category_name' => 'Actualité',
-                'posts_per_page' => 4,
+                'posts_per_page' => 8,
 
             );
 
@@ -78,27 +76,22 @@
             ?>
 
 
-            <div class="card card-duo">
+            <ul>
                 <?php
                 if ($the_query->have_posts()) {
                     while ($the_query->have_posts()) {
                         $the_query->the_post();
                 ?>
-                        <div class="card-item">
-                            <?php
-                            if (has_post_thumbnail()) {
-                                echo '<div class="card-thumbnail">';
-                                echo get_the_post_thumbnail(get_the_ID(), 'medium');
-                                echo '</div>';
-                            } ?>
-                            <div class="card-section">
 
-                                <h2 class="card-title"> <?php echo get_the_title(); ?> </h2>
-
-
-                            </div>
+                        <li class="list list-actu">
+                            <h2 class="card-title"><?php echo get_the_title(); ?></h2>
                             <a href="<?php echo get_the_permalink(); ?>" rel="noopener noreferrer" class="card-link">Lire l'article</a>
-                        </div>
+                        </li>
+
+
+
+
+
                 <?php
                     }
                     wp_reset_postdata();
@@ -106,7 +99,7 @@
                     echo '<p>Aucun article trouvé dans cette catégorie.</p>';
                 }
                 ?>
-            </div>
+            </ul>
         </div>
         <div>
             <h2 class="title">Emplois</h2>
