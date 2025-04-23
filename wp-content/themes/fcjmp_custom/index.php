@@ -15,12 +15,12 @@
         <h3 class="title title-medium">Nos prochaines formations</h3>
         <?php
         $args = array(
-            'category_name'   => 'Formation', // Nom de la catégorie
-            'posts_per_page'  => 4,           // Nombre d'articles à afficher
-            'meta_key'        => 'date_formation', // Nom du champ ACF
-            'orderby'         => 'meta_value',     // Trier par la valeur du champ
-            'order'           => 'ASC',           // Trier en ordre croissant (dates proches en premier)
-            'meta_type'       => 'DATE',          // Type du champ (date)
+            'category_name'   => 'Formation',
+            'posts_per_page'  => 4,
+            'meta_key'        => 'date_formation',
+            'orderby'         => 'meta_value',
+            'order'           => 'ASC',
+            'meta_type'       => 'DATE',
         );
 
         $the_query = new WP_Query($args);
@@ -76,14 +76,14 @@
             ?>
 
 
-            <ul>
+            <ul class="list list-actu">
                 <?php
                 if ($the_query->have_posts()) {
                     while ($the_query->have_posts()) {
                         $the_query->the_post();
                 ?>
 
-                        <li class="list list-actu">
+                        <li>
                             <h2 class="card-title"><?php echo get_the_title(); ?></h2>
                             <a href="<?php echo get_the_permalink(); ?>" rel="noopener noreferrer" class="card-link">Lire l'article</a>
                         </li>
