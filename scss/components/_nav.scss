@@ -31,12 +31,13 @@
         flex-flow: row nowrap;
       }
       &-item {
-        padding: 1rem 0;
+        padding: 0.5rem 0;
       }
       .sub-menu {
         background-color: white;
         margin-left: 0.7rem;
-        margin-top: 0.7rem;
+        height: 0;
+        opacity: 0;
         display: flex;
         flex-flow: column nowrap;
         gap: 0.7rem;
@@ -49,10 +50,11 @@
           position: absolute;
           padding: 1rem;
           border-radius: 1rem;
+          margin-left: 0;
+          height: unset;
         }
 
         a {
-          margin: 0.7rem;
           padding: 0.5rem;
         }
       }
@@ -68,6 +70,9 @@
   &--open {
     left: 0vw;
   }
+}
+
+.menu-item-has-children {
 }
 .menu-item-has-children a {
   display: flex;

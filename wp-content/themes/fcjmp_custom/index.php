@@ -87,11 +87,6 @@
                             <h2 class="card-title"><?php echo get_the_title(); ?></h2>
                             <a href="<?php echo get_the_permalink(); ?>" rel="noopener noreferrer" class="card-link">Lire l'article</a>
                         </li>
-
-
-
-
-
                 <?php
                     }
                     wp_reset_postdata();

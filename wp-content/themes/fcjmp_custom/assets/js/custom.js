@@ -1,3 +1,5 @@
+//Menu
+
 let burger = document.querySelector(".nav_burger");
 let body = document.querySelector("body");
 if (burger) {
@@ -12,13 +14,12 @@ if (burger) {
   });
 }
 
+//Chevron
 let menuChevron = document.querySelector(".menu-item-has-children a");
-
 if (menuChevron) {
   let span = document.createElement("span");
   span.classList.add("chevron-icon");
 
-  // Création de l'image
   let img = document.createElement("img");
   img.src = `${themeData.themeUrl}/assets/img/chevrons-down.svg`;
   img.alt = "Chevron";
@@ -30,3 +31,11 @@ if (menuChevron) {
   span.appendChild(img2);
   menuChevron.appendChild(span);
 }
+
+// class mobile
+
+let subMenu = document.querySelectorAll(".sub-menu");
+
+subMenu.forEach((el) => {
+  el.classList.add("menu-mobile");
+});
