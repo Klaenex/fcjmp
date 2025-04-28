@@ -35,7 +35,7 @@ if (menuChevron) {
 // class mobile
 
 let subMenu = document.querySelectorAll(".sub-menu");
-
+sele;
 subMenu.forEach((el) => {
   el.classList.add("menu-mobile");
 });
