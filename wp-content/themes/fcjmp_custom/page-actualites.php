@@ -19,11 +19,12 @@ function get_first_image_in_post($post_id)
 // Récupérer la recherche (si elle existe)
 $search_query = isset($_GET['s']) ? sanitize_text_field($_GET['s']) : '';
 
+// Récupérer la catégorie sélectionnée (si elle existe)
+$selected_category = isset($_GET['categorie']) ? sanitize_text_field($_GET['categorie']) : '';
+
 // Pagination sécurisée
 $paged = get_query_var('paged') ? get_query_var('paged') : 1;
 ?>
-
-
 
 <div class="hero-banner hero-green">
     <h2 class="hero-banner_text hero-banner_text-green">Actualités</h2>
@@ -34,16 +35,48 @@ $paged = get_query_var('paged') ? get_query_var('paged') : 1;
 
         <h3 class="title title-medium">Les dernières nouvelles du secteur</h3>
 
+        <!-- Formulaire de filtre par catégorie -->
+        <form method="get" class="filter-form" style="margin-bottom: 2rem;">
+            <label for="categorie">Filtrer par catégorie :</label>
+            <select name="categorie" id="categorie" onchange="this.form.submit()">
+                <option value="">Toutes les catégories</option>
+                <?php
+                // Récupérer uniquement les catégories "emploi" et "actualité"
+                $allowed_slugs = array('emploi', 'actualité');
+
+                $categories = get_categories(array(
+                    'taxonomy'   => 'category',
+                    'hide_empty' => true,
+                    'slug'       => $allowed_slugs,
+                ));
+
+                foreach ($categories as $category) {
+                    $selected = ($selected_category === $category->slug) ? 'selected' : '';
+                    echo '<option value="' . esc_attr($category->slug) . '" ' . $selected . '>' . esc_html($category->name) . '</option>';
+                }
+                ?>
+            </select>
+
+            <?php if (!empty($search_query)) : ?>
+                <input type="hidden" name="s" value="<?php echo esc_attr($search_query); ?>">
+            <?php endif; ?>
+        </form>
 
         <?php
         $args = array(
-            'category_name' => 'actualité',
             'posts_per_page' => 12,
-            'paged' => $paged
+            'paged' => $paged,
         );
 
         if (!empty($search_query)) {
             $args['s'] = $search_query;
+        }
+
+        if (!empty($selected_category)) {
+            $args['category_name'] = $selected_category;
+        } else {
+            // Par défaut, afficher les deux catégories
+            $args['category_name'] = 'Emplois,actualité,Formation,BDL';
         }
 
         $actualites_query = new WP_Query($args);
@@ -89,8 +122,8 @@ $paged = get_query_var('paged') ? get_query_var('paged') : 1;
                         'end_size'     => 2,
                         'mid_size'     => 1,
                         'prev_next'    => true,
-                        'prev_text'    => sprintf('', __('<<', 'text-domain')),
-                        'next_text'    => sprintf('', __('>>', 'text-domain')),
+                        'prev_text'    => __('<<', 'text-domain'),
+                        'next_text'    => __('>>', 'text-domain'),
                     ));
                     ?>
                 </div>
