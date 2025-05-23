@@ -106,6 +106,34 @@ html {
   }
 }
 .list {
+  &-mission {
+    li {
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: center;
+
+      margin-bottom: 4em;
+      gap: 5em;
+      @include md {
+        flex-flow: row nowrap;
+        align-items: center;
+      }
+      div {
+        @include md {
+          width: 250px;
+        }
+      }
+      img {
+        max-width: 400px;
+        max-height: 300px;
+      }
+      @include md {
+        &:nth-child(even) {
+          flex-flow: row-reverse nowrap;
+        }
+      }
+    }
+  }
   &-member {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -173,7 +201,9 @@ gmp-map {
 }
 
 .pagination {
-  margin: 0 auto;
+  width: max-content;
+  margin: 2rem auto;
+
   color: black;
   .page-numbers {
     color: black;

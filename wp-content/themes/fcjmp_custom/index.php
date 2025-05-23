@@ -7,7 +7,8 @@
 </div>
 <div class="content content-margin">
     <p class="text-big">La FCJMP est une <strong>Organisation de jeunesse</strong> pluraliste, fédérant des <strong>Maisons de Jeunes</strong>, des <strong>Centres de Rencontre et d’hébergement</strong> et des <strong>Centres d’Expression Culturelle</strong>, dans une perspective d’<strong>Egalité des Chances.</strong></p>
-    <a class="button button-bigtext">En savoir plus ?</a>
+    <a class="button button-bigtext" href="<?php echo get_permalink(get_page_by_path('a-propos')); ?>">En savoir plus ?</a>
+
 </div>
 <section id="formation" class="section section-formation section-green">
     <div class="content">

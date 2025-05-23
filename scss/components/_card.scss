@@ -28,6 +28,15 @@
     flex-direction: column;
     justify-content: space-between;
   }
+  &-member {
+    overflow: hidden;
+    box-shadow: 4px 4px 20px 0px rgba(0, 0, 0, 0.3);
+    border-radius: 1rem;
+    padding: 1rem;
+    img {
+      max-width: 45px;
+    }
+  }
 
   &-thumbnail {
     width: auto;

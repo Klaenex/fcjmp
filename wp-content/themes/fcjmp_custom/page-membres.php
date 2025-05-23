@@ -17,6 +17,8 @@ $apiKey = $_ENV['API_MONDAY'];
         console.log("DOM fully loaded and parsed");
 
         const apiKey = "<?php echo esc_js($apiKey); ?>";
+        const templateDirectoryUri = "<?php echo get_template_directory_uri(); ?>";
+
         if (!apiKey) {
             console.error("API Key is not defined.");
             return;
@@ -24,31 +26,30 @@ $apiKey = $_ENV['API_MONDAY'];
 
         const boardId = "3180263669";
         const limitQuery = 100;
-        const imgId = "file_mknpca6";
 
         async function fetchMembers() {
             const query = `
-                 query {
-                     complexity {
-                         query
-                         before
-                         after
-                     }
-                     boards(ids: [${boardId}]) {
-                         items_page (limit:${limitQuery}){
-                             items {
-                                 name
-                                 column_values(
-                                     ids: ["texte", "email", "location", "phone", "link_mknht68g", "link_mknhjhpb", "numeric_mknpawtj","file_mknpca6"]
-                                 ) {
-                                     id
-                                     text
-                                 }
-                             }
-                         }
-                     }
-                 }
-             `;
+            query {
+                complexity {
+                    query
+                    before
+                    after
+                }
+                boards(ids: [${boardId}]) {
+                    items_page (limit:${limitQuery}) {
+                        items {
+                            name
+                            column_values(
+                                ids: ["texte", "email", "location", "phone", "link_mknht68g", "link_mknhjhpb", "numeric_mknpawtj","file_mknpca6"]
+                            ) {
+                                id
+                                text
+                            }
+                        }
+                    }
+                }
+            }
+        `;
 
             try {
                 const response = await fetch("https://api.monday.com/v2", {
@@ -77,62 +78,43 @@ $apiKey = $_ENV['API_MONDAY'];
         }
 
         function displayMembers(members) {
-            const memberListBruxelles = document.getElementById("memberListBruxelles");
-            const memberListHainaut = document.getElementById("memberListHainaut");
-            const memberListBrabantWallon = document.getElementById("memberListBrabantWallon");
-            const memberListLiege = document.getElementById("memberListLiege");
-            const memberListLuxembourg = document.getElementById("memberListLuxembourg");
-            const memberListNamur = document.getElementById("memberListNamur");
+            const regions = {
+                "1": document.getElementById("memberListBruxelles"),
+                "2": document.getElementById("memberListHainaut"),
+                "3": document.getElementById("memberListBrabantWallon"),
+                "4": document.getElementById("memberListLiege"),
+                "5": document.getElementById("memberListLuxembourg"),
+                "6": document.getElementById("memberListNamur"),
+            };
 
-            if (!memberListBruxelles || !memberListHainaut || !memberListBrabantWallon || !memberListLiege || !memberListLuxembourg || !memberListNamur) {
-                console.error("One or more member lists are not found in the DOM.");
-                return;
-            }
+            Object.values(regions).forEach((list) => (list.innerHTML = ""));
 
-            memberListBruxelles.innerHTML = "";
-            memberListHainaut.innerHTML = "";
-            memberListBrabantWallon.innerHTML = "";
-            memberListLiege.innerHTML = "";
-            memberListLuxembourg.innerHTML = "";
-            memberListNamur.innerHTML = "";
-
-            let i = 0;
-            members.forEach((member) => {
-                i++;
+            members.forEach((member, index) => {
                 console.log("Processing member:", member);
-                const listItem = document.createElement("li");
-                listItem.innerHTML = `
-                     <strong>${i}. ${member.name}</strong><br>
-                     Email: ${member.column_values[1]?.text || "N/A"}<br>
-                     Localisation: ${member.column_values[2]?.text || "N/A"}<br>
-                     Téléphone: ${member.column_values[3]?.text || "N/A"}<br>
-                     Instagram: ${member.column_values[4]?.text || "N/A"}<br>
-                     Facebook: ${member.column_values[5]?.text || "N/A"}
-                 `;
+                const listItem = document.createElement("div");
+                listItem.classList.add('card-member');
 
-                // Vérifiez si la valeur est un nombre avant de trier
-                const region = member.column_values[6]?.text;
-                if (region && !isNaN(region)) {
-                    switch (region) {
-                        case "1":
-                            memberListBruxelles.appendChild(listItem);
-                            break;
-                        case "2":
-                            memberListHainaut.appendChild(listItem);
-                            break;
-                        case "3":
-                            memberListBrabantWallon.appendChild(listItem);
-                            break;
-                        case "4":
-                            memberListLiege.appendChild(listItem);
-                            break;
-                        case "5":
-                            memberListLuxembourg.appendChild(listItem);
-                            break;
-                        case "6":
-                            memberListNamur.appendChild(listItem);
-                            break;
+                listItem.innerHTML = `
+                <span>
+                    <img src="${member.column_values[1].text}" alt="${member.name}"/>
+                    <h3>${member.name}</h3>
+                </span>
+                <span>
+                    <p>Email: ${member.column_values[2]?.text || "N/A"}</p>
+                    <p>Téléphone: ${member.column_values[4]?.text || "N/A"}</p>
+                    ${
+                      member.column_values[3]?.text
+                        ? `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(member.column_values[3].text)}" target="_blank" rel="noopener noreferrer">
+                            <img src="${templateDirectoryUri}/assets/img/maps.svg" alt="Google Maps"/>
+                           </a>`
+                        : ""
                     }
+                </span>
+            `;
+
+                const region = member.column_values[7]?.text;
+                if (region && regions[region]) {
+                    regions[region].appendChild(listItem);
                 }
             });
         }
@@ -141,40 +123,41 @@ $apiKey = $_ENV['API_MONDAY'];
     });
 </script>
 
+
 <section class="section">
     <div class="content">
         <h1>Membres de la FCJMP</h1>
 
         <h2>Bruxelles</h2>
-        <ul id="memberListBruxelles">
+        <div class="card" id="memberListBruxelles">
             <!-- Les membres de Bruxelles seront affichés ici -->
 
-        </ul>
+        </div>
 
         <h2>Hainaut</h2>
-        <ul id="memberListHainaut">
+        <div class="card" id="memberListHainaut">
             <!-- Les membres de Hainaut seront affichés ici -->
-        </ul>
+        </div>
 
         <h2>Brabant Wallon</h2>
-        <ul id="memberListBrabantWallon">
+        <div class="card" id="memberListBrabantWallon">
             <!-- Les membres de Brabant Wallon seront affichés ici -->
-        </ul>
+        </div>
 
         <h2>Liège</h2>
-        <ul id="memberListLiege">
+        <div class="card" id="memberListLiege">
             <!-- Les membres de Liège seront affichés ici -->
-        </ul>
+        </div>
 
         <h2>Luxembourg</h2>
-        <ul id="memberListLuxembourg">
+        <div class="card" id="memberListLuxembourg">
             <!-- Les membres de Luxembourg seront affichés ici -->
-        </ul>
+        </div>
 
         <h2>Namur</h2>
-        <ul id="memberListNamur">
+        <div class="card" id="memberListNamur">
             <!-- Les membres de Namur seront affichés ici -->
-        </ul>
+        </div>
     </div>
 </section>
 

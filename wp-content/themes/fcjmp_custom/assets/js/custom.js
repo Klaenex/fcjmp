@@ -34,8 +34,13 @@ if (menuChevron) {
 
 // class mobile
 
-let subMenu = document.querySelectorAll(".sub-menu");
-sele;
-subMenu.forEach((el) => {
-  el.classList.add("menu-mobile");
-});
+let subMenu = document.querySelectorAll(".menu-item-has-children");
+
+if (!window.matchMedia("(min-width: 800px)").matches) {
+  subMenu.forEach((el) => {
+    el.classList.add("menu-mobile");
+    el.addEventListener("click", () => {
+      el.classList.toggle("menu-mobile--open");
+    });
+  });
+}

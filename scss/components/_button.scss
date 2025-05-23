@@ -31,4 +31,17 @@
   &-outils {
     margin-top: 3rem;
   }
+
+  &-filter {
+    background-color: $c-grey;
+    color: white;
+    text-decoration: none;
+    &.active {
+      background-color: $c-green;
+      text-decoration: underline;
+    }
+    &.reset {
+      background-color: $c-red;
+    }
+  }
 }

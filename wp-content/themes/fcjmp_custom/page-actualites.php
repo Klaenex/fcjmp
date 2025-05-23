@@ -16,11 +16,8 @@ function get_first_image_in_post($post_id)
     return false;
 }
 
-// Récupérer la recherche (si elle existe)
-$search_query = isset($_GET['s']) ? sanitize_text_field($_GET['s']) : '';
-
-// Récupérer la catégorie sélectionnée (si elle existe)
-$selected_category = isset($_GET['categorie']) ? sanitize_text_field($_GET['categorie']) : '';
+// Récupérer les catégories sélectionnées (sous forme de tableau)
+$selected_categories = isset($_GET['categorie']) ? explode(',', sanitize_text_field($_GET['categorie'])) : [];
 
 // Pagination sécurisée
 $paged = get_query_var('paged') ? get_query_var('paged') : 1;
@@ -32,35 +29,49 @@ $paged = get_query_var('paged') ? get_query_var('paged') : 1;
 
 <section id="actualites" class="section">
     <div class="content">
-
         <h3 class="title title-medium">Les dernières nouvelles du secteur</h3>
 
-        <!-- Formulaire de filtre par catégorie -->
-        <form method="get" class="filter-form" style="margin-bottom: 2rem;">
-            <label for="categorie">Filtrer par catégorie :</label>
-            <select name="categorie" id="categorie" onchange="this.form.submit()">
-                <option value="">Toutes les catégories</option>
+        <!-- Filtres par boutons -->
+        <div class="filter-bar" style="margin-bottom: 2rem;">
+            <div class="filter-categories">
                 <?php
-                // Récupérer uniquement les catégories "emploi" et "actualité"
-                $allowed_slugs = array('emploi', 'actualité');
-
+                $allowed_slugs = array('emplois', 'actualité', 'BDL', 'formation');
                 $categories = get_categories(array(
                     'taxonomy'   => 'category',
                     'hide_empty' => true,
                     'slug'       => $allowed_slugs,
                 ));
 
+                $current_url = get_permalink();
+
                 foreach ($categories as $category) {
-                    $selected = ($selected_category === $category->slug) ? 'selected' : '';
-                    echo '<option value="' . esc_attr($category->slug) . '" ' . $selected . '>' . esc_html($category->name) . '</option>';
+                    $is_active = in_array($category->slug, $selected_categories);
+                    $url_categories = $selected_categories;
+
+                    if ($is_active) {
+                        // On retire la catégorie si elle est déjà sélectionnée (toggle off)
+                        $url_categories = array_diff($url_categories, array($category->slug));
+                    } else {
+                        // On l'ajoute (toggle on)
+                        $url_categories[] = $category->slug;
+                    }
+
+                    $url = add_query_arg(array(
+                        'categorie' => implode(',', $url_categories)
+                    ), $current_url);
+
+                    $active = $is_active ? 'active' : '';
+                    echo '<a href="' . esc_url($url) . '" class="button button-filter ' . $active . '">' . esc_html($category->name) . '</a> ';
+                }
+
+                if (!empty($selected_categories)) {
+                    echo '<a href="' . esc_url($current_url) . '" class="button button-filter reset">
+                        ✕
+                    </a>';
                 }
                 ?>
-            </select>
-
-            <?php if (!empty($search_query)) : ?>
-                <input type="hidden" name="s" value="<?php echo esc_attr($search_query); ?>">
-            <?php endif; ?>
-        </form>
+            </div>
+        </div>
 
         <?php
         $args = array(
@@ -68,15 +79,10 @@ $paged = get_query_var('paged') ? get_query_var('paged') : 1;
             'paged' => $paged,
         );
 
-        if (!empty($search_query)) {
-            $args['s'] = $search_query;
-        }
-
-        if (!empty($selected_category)) {
-            $args['category_name'] = $selected_category;
+        if (!empty($selected_categories)) {
+            $args['category_name'] = implode(',', $selected_categories);
         } else {
-            // Par défaut, afficher les deux catégories
-            $args['category_name'] = 'Emplois,actualité,Formation,BDL';
+            $args['category_name'] = 'emplois,actualité,formation,bdl';
         }
 
         $actualites_query = new WP_Query($args);
@@ -90,15 +96,20 @@ $paged = get_query_var('paged') ? get_query_var('paged') : 1;
                     <div class="card-item">
                         <?php
                         if (has_post_thumbnail()) {
-                            echo '<div class="card-thumbnail">';
-                            echo get_the_post_thumbnail(get_the_ID(), 'medium');
-                            echo '</div>';
+                            $thumbnail_class = has_category('Emplois') ? 'card-thumbnail card-logo' : 'card-thumbnail';
+                        ?>
+                            <div class="<?php echo $thumbnail_class; ?>">
+                                <?php echo get_the_post_thumbnail(get_the_ID(), 'medium'); ?>
+                            </div>
+                            <?php
                         } else {
                             $first_img = get_first_image_in_post(get_the_ID());
                             if ($first_img) {
-                                echo '<div class="card-thumbnail">';
-                                echo '<img src="' . esc_url($first_img) . '" alt="' . esc_attr(get_the_title()) . '" />';
-                                echo '</div>';
+                            ?>
+                                <div class="card-thumbnail">
+                                    <img src="<?php echo esc_url($first_img); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" />
+                                </div>
+                        <?php
                             }
                         }
                         ?>
@@ -110,28 +121,29 @@ $paged = get_query_var('paged') ? get_query_var('paged') : 1;
                 <?php
                 endwhile;
                 ?>
-                <div class="pagination">
-                    <?php
-                    echo paginate_links(array(
-                        'base'         => str_replace(999999999, '%#%', esc_url(get_pagenum_link(999999999))),
-                        'total'        => $actualites_query->max_num_pages,
-                        'current'      => max(1, get_query_var('paged')),
-                        'format'       => '?paged=%#%',
-                        'show_all'     => false,
-                        'type'         => 'plain',
-                        'end_size'     => 2,
-                        'mid_size'     => 1,
-                        'prev_next'    => true,
-                        'prev_text'    => __('<<', 'text-domain'),
-                        'next_text'    => __('>>', 'text-domain'),
-                    ));
-                    ?>
-                </div>
+
             <?php
                 wp_reset_postdata();
             else :
                 echo '<p>Aucun article trouvé.</p>';
             endif;
+            ?>
+        </div>
+        <div class="pagination">
+            <?php
+            echo paginate_links(array(
+                'base'         => str_replace(999999999, '%#%', esc_url(get_pagenum_link(999999999))),
+                'total'        => $actualites_query->max_num_pages,
+                'current'      => max(1, get_query_var('paged')),
+                'format'       => '?paged=%#%',
+                'show_all'     => false,
+                'type'         => 'plain',
+                'end_size'     => 2,
+                'mid_size'     => 1,
+                'prev_next'    => true,
+                'prev_text'    => __('<<', 'text-domain'),
+                'next_text'    => __('>>', 'text-domain'),
+            ));
             ?>
         </div>
     </div>
