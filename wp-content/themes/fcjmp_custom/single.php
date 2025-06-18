@@ -6,17 +6,6 @@
 
                 <header class="article-header">
                     <h1 class="article-title"><?php the_title(); ?></h1>
-                    <div class="article-meta">
-                        <span class="article-author">
-                            Publié par <?php the_author_posts_link(); ?>
-                        </span>
-                        <span class="article-date">
-                            le <?php echo get_the_date(); ?>
-                        </span>
-                        <span class="article-categories">
-                            dans <?php the_category(', '); ?>
-                        </span>
-                    </div>
                 </header>
 
                 <div class="article-content">
