@@ -92,3 +92,11 @@ function fcjmp_custom_logout_redirect()
     exit;
 }
 add_action('wp_logout', 'fcjmp_custom_logout_redirect');
+
+
+
+// =======================
+// FORCE DEV MODE
+// =======================
+
+add_filter('wp_is_application_passwords_available', '__return_true');
