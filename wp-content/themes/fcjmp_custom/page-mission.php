@@ -15,11 +15,6 @@ get_header();
 </section>
 <section class="section">
     <div class="content">
-
-        <p>Ces missions sont attribuées par les décrets du 20 juillet 2000 relatif aux centres de jeunes et du 26 mars 2009 relatif aux organisations de jeunesse
-        </p>
-
-
         <ul class="list list-mission">
             <li>
                 <div>

@@ -24,6 +24,7 @@
             'meta_type'       => 'DATE',
         );
 
+
         $the_query = new WP_Query($args);
         ?>
         <div class="card">
