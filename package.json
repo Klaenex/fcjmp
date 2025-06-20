@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "browser-sync": "browser-sync start --config ./bs-config.js",
     "sass": "sass --style=compressed --watch ./scss:./wp-content/themes/fcjmp_custom/assets/css",
-    "db": "C:\\xampp\\mysql\\bin\\mysqldump -u root -p fcjmp > ./dump.sql"
+    "db": "D:\\xampp\\mysql\\bin\\mysqldump -u root -p fjmp > ./dump.sql"
   },
   "author": "",
   "license": "ISC",
