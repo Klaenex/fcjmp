@@ -151,7 +151,11 @@ html {
     }
   }
   &-actu {
+    margin: auto 2rem;
     margin-top: 2em;
+    @include md {
+      margin: 2em auto;
+    }
     li {
       display: grid;
       grid-template-columns: 0.7fr 0.3fr;

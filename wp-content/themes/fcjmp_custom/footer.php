@@ -83,7 +83,7 @@
         </div>
 
         <div class="wrapper-support">
-            <p>Nos partenaires :</p>
+            <p class="title title-medium title-footer">Nos partenaires</p>
             <ul class="list list-partnair list-partnair_fixed">
                 <li class="list-partnair-item">
                     <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/logo_SEFoP_positif.png" alt="Logo SEFoP" loading="lazy">
@@ -99,8 +99,8 @@
                 <div>
                     <h2 class="title title-medium title-footer">Newsletter</h2>
                     <div class="mc-field-group">
-                        <label for="mce-EMAIL">Email<span class="asterisk">*</span></label>
-                        <input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required value="">
+
+                        <input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required value="" placeholder="Votre adresse e-mail" aria-label="Adresse e-mail">
                     </div>
                     <div id="mce-responses" class="clear foot">
                         <div class="response" id="mce-error-response" style="display: none;"></div>
@@ -111,7 +111,7 @@
                     </div>
                     <div class="optionalParent">
                         <div class="clear foot">
-                            <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="button" value="S'inscrire">
+                            <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="button button-newsletter" value="S'inscrire">
                             <p style="margin: 0px auto;">
                                 <a href="http://eepurl.com/i4DdCw" title="Avec Mailchimp, les campagnes de marketing par e-mail sont un jeu d'enfant">
                                     <span style="display: inline-block; background-color: transparent; border-radius: 4px;"></span>

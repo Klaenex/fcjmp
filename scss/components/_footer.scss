@@ -52,15 +52,18 @@
     flex-flow: row wrap;
     gap: 2rem;
     justify-content: space-evenly;
-    @include md {
+    margin: 2rem auto;
+    max-width: 850px;
+    @include xl {
       position: absolute;
-      top: 0;
+      top: -2em;
       right: 450px;
       margin-left: 1em;
-      max-width: 60%;
+
       flex-wrap: nowrap;
     }
     &_fixed {
+      margin: unset;
       position: unset;
     }
     &-item {
@@ -85,6 +88,12 @@
       span {
         margin-right: 1rem;
       }
+    }
+  }
+
+  &-footer {
+    p {
+      margin: 0.5rem 0;
     }
   }
 }
