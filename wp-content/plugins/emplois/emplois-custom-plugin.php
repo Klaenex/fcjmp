@@ -98,3 +98,13 @@ function oj_desactiver_admin_bar_pour_membres($show_admin_bar)
     return $show_admin_bar;
 }
 add_filter('show_admin_bar', 'oj_desactiver_admin_bar_pour_membres', 10, 1);
+
+
+// Ajouter automatiquement la catégorie "Emplois" aux offres créées par les membres
+function oj_ajouter_categorie_emploi_auto($post_ID, $post, $update)
+{
+    if (!$update && $post->post_type === 'offres' && current_user_can('membre')) {
+        wp_set_object_terms($post_ID, 'Emplois', 'categorie_emploi', true);
+    }
+}
+add_action('wp_insert_post', 'oj_ajouter_categorie_emploi_auto', 10, 3);
