@@ -19,66 +19,66 @@
     height: unset;
     flex-flow: row nowrap;
   }
-  .menu-fcjmp_basic-container {
-    .menu {
+
+  .menu {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 0.7rem;
+
+    @include md {
+      place-items: center;
+      position: relative;
+      flex-flow: row nowrap;
+    }
+
+    &-item {
+      padding: 0.4rem 0;
+      cursor: pointer;
+    }
+    &-mobile {
+      &--open {
+        .sub-menu {
+          opacity: 1 !important;
+          visibility: visible !important;
+
+          height: 100% !important;
+        }
+      }
+    }
+
+    .sub-menu {
+      background-color: white;
+      margin-left: 0.7rem;
+      height: 0;
+      opacity: 0;
       display: flex;
       flex-flow: column nowrap;
       gap: 0.7rem;
 
       @include md {
-        place-items: center;
-        position: relative;
-        flex-flow: row nowrap;
-      }
-
-      &-item {
-        padding: 0.4rem 0;
-        cursor: pointer;
-      }
-      &-mobile {
-        &--open {
-          .sub-menu {
-            opacity: 1 !important;
-            visibility: visible !important;
-
-            height: 100% !important;
-          }
-        }
-      }
-
-      .sub-menu {
-        background-color: white;
-        margin-left: 0.7rem;
-        height: 0;
+        transition: opacity 0.3s ease, transform 0.3s ease;
         opacity: 0;
-        display: flex;
-        flex-flow: column nowrap;
-        gap: 0.7rem;
-
-        @include md {
-          transition: opacity 0.3s ease, transform 0.3s ease;
-          opacity: 0;
-          transform: translateY(-10px);
-          visibility: hidden;
-          position: absolute;
-          padding: 1rem;
-          border-radius: 1rem;
-          margin-left: 0;
-          height: unset;
-        }
-
-        a {
-          padding: 0.5rem;
-        }
+        transform: translateY(-10px);
+        visibility: hidden;
+        position: absolute;
+        padding: 1rem;
+        border-radius: 1rem;
+        margin-left: 0;
+        height: unset;
       }
 
       a {
-        color: black;
-        font-weight: $font-weight-bold;
-        text-decoration: none;
+        padding: 0.5rem;
       }
     }
+
+    a {
+      color: black;
+      font-weight: $font-weight-bold;
+      text-decoration: none;
+    }
   }
+
   &--open {
     left: 0vw;
   }

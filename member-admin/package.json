@@ -1,0 +1,24 @@
+{
+  "name": "member-admin",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite build --watch --clearScreen=false",
+    "build": "vite build",
+    "serve": "vite preview",
+    "hotbuild": "vite build --watch --clearScreen=false"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "description": "",
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.6.0",
+    "vite": "^7.0.4"
+  }
+}
