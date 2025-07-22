@@ -35,7 +35,7 @@ export default function App() {
   return (
     <div>
       <h1>Bonjour, {user.name} !</h1>
-      <p>Bienvenue dans votre espace membre bblou.</p>
+      <p>Bienvenue dans votre espace membre bblounlin.</p>
     </div>
   );
 }

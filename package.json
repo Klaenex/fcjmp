@@ -3,12 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "npm-run-all --parallel browser-sync sass react",
+    "start": "npm-run-all --parallel browser-sync sass",
     "test": "echo \"Error: no test specified\" && exit 1",
     "browser-sync": "browser-sync start --config ./bs-config.js",
     "sass": "sass --style=compressed --watch ./scss:./wp-content/themes/fcjmp_custom/assets/css",
-    "db": "C:\\xampp\\mysql\\bin\\mysqldump -u root -p fcjmp > ./dump.sql",
-    "react": "cd member-admin && npm run build --watch --clearScreen=false"
+    "db": "C:\\xampp\\mysql\\bin\\mysqldump -u root -p fcjmp > ./dump.sql"
   },
   "author": "",
   "license": "ISC",
