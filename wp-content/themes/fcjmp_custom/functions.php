@@ -110,9 +110,13 @@ add_filter('wp_is_application_passwords_available', '__return_true');
 // =======================
 // ESPACE-MEMBRE REACT (dev ou prod)
 // =======================
-
 function fcjmp_enqueue_espace_membre_react()
 {
+    // Charger uniquement si on est sur le template espace membre
+    if (!is_page_template('page-espacemembre.php')) {
+        return;
+    }
+
     // Mode DEV : on injecte Vite + ES module + les variables JS
     if (defined('WP_DEBUG') && WP_DEBUG) {
         // 1) HMR client Vite
@@ -131,7 +135,7 @@ function fcjmp_enqueue_espace_membre_react()
             null,
             true
         );
-        // 3) On fournit rest_url et nonce même en dev
+        // 3) Variables accessibles dans React
         wp_localize_script(
             'fcjmp-react-dev',
             'FCJMP_REACT',
@@ -178,20 +182,7 @@ function fcjmp_enqueue_espace_membre_react()
         );
     } else {
         // Message dans le HTML si build manquant
-        echo "<!-- Espace‑membre build non trouvé : lancez 'npm run build' -->";
+        echo "<!-- Espace-membre build non trouvé : lancez 'npm run build' -->";
     }
 }
 add_action('wp_enqueue_scripts', 'fcjmp_enqueue_espace_membre_react');
-
-
-// =======================
-// Ajout de type="module" pour Vite en dev
-// =======================
-function fcjmp_add_module_type($tag, $handle, $src)
-{
-    if (in_array($handle, array('vite-client', 'fcjmp-react-dev'), true)) {
-        return '<script type="module" src="' . esc_url($src) . '"></script>';
-    }
-    return $tag;
-}
-add_filter('script_loader_tag', 'fcjmp_add_module_type', 10, 3);
