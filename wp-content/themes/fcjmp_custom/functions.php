@@ -101,88 +101,17 @@ add_action('wp_logout', 'fcjmp_custom_logout_redirect');
 
 
 // =======================
-// FORCE DEV MODE
+// FORCE DEV MODE (Application Passwords)
 // =======================
 
 add_filter('wp_is_application_passwords_available', '__return_true');
 
 
-// =======================
-// ESPACE-MEMBRE REACT (dev ou prod)
-// =======================
-function fcjmp_enqueue_espace_membre_react()
-{
-    // Charger uniquement si on est sur le template espace membre
-    if (!is_page_template('page-espacemembre.php')) {
-        return;
-    }
 
-    // Mode DEV : on injecte Vite + ES module + les variables JS
-    if (defined('WP_DEBUG') && WP_DEBUG) {
-        // 1) HMR client Vite
-        wp_enqueue_script(
-            'vite-client',
-            'http://localhost:5173/@vite/client',
-            array(),
-            null,
-            false
-        );
-        // 2) Entrypoint React en dev
-        wp_enqueue_script(
-            'fcjmp-react-dev',
-            'http://localhost:5173/src/main.jsx',
-            array('vite-client'),
-            null,
-            true
-        );
-        // 3) Variables accessibles dans React
-        wp_localize_script(
-            'fcjmp-react-dev',
-            'FCJMP_REACT',
-            array(
-                'rest_url' => esc_url_raw(rest_url()),
-                'nonce'    => wp_create_nonce('wp_rest'),
-            )
-        );
-        return;
+// Filtre pour forcer l'enqueue des assets
+add_filter('im_force_enqueue_assets', function ($force, $post) {
+    if (is_page('espace-membre')) { // par ID ou slug si tu veux
+        return true;
     }
-
-    // ---- En PRODUCTION : on charge les bundles buildés ----
-    $dir = get_template_directory() . '/espace-membre';
-    $uri = get_template_directory_uri() . '/espace-membre';
-
-    // CSS build
-    $css = $dir . '/index.css';
-    if (file_exists($css)) {
-        wp_enqueue_style(
-            'fcjmp-espace-membre-css',
-            $uri . '/index.css',
-            array(),
-            filemtime($css)
-        );
-    }
-
-    // JS build
-    $js = $dir . '/index.js';
-    if (file_exists($js)) {
-        wp_enqueue_script(
-            'fcjmp-espace-membre-js',
-            $uri . '/index.js',
-            array(),
-            filemtime($js),
-            true
-        );
-        wp_localize_script(
-            'fcjmp-espace-membre-js',
-            'FCJMP_REACT',
-            array(
-                'rest_url' => esc_url_raw(rest_url()),
-                'nonce'    => wp_create_nonce('wp_rest'),
-            )
-        );
-    } else {
-        // Message dans le HTML si build manquant
-        echo "<!-- Espace-membre build non trouvé : lancez 'npm run build' -->";
-    }
-}
-add_action('wp_enqueue_scripts', 'fcjmp_enqueue_espace_membre_react');
+    return $force;
+}, 10, 2);

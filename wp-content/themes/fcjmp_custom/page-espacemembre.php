@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Template Name: Espace membre React (shortcode forcé)
+ * Template Name: Espace membre React
  */
 get_header();
 ?>

@@ -232,16 +232,31 @@ final class IM_Interface_Membres
 
     public function maybe_enqueue_assets()
     {
-        if (! is_singular()) return;
-        global $post;
-        if (! $post) return;
+        $this->enqueue_vite_assets_and_context();
+        if (! is_singular()) {
+            return;
+        }
 
+        global $post;
+        if (! $post) {
+            return;
+        }
+
+        // 1. Détection du shortcode dans le contenu
         $has_sc = has_shortcode($post->post_content, self::SHORTCODE);
 
+        // 2. Détection d’un template personnalisé
+        // → ajoute ici tous les fichiers de template que tu utilises pour l’espace membre
+        $uses_template = (
+            is_page_template('page-espacemembre.php')
+            || is_page_template('page-espacemembre-react.php')
+        );
 
-        $uses_template = is_page_template('page-espace-membre.php') || is_page_template('page-espace-membre-react.php');
+        // 3. Possibilité de forcer depuis le thème via un filtre
+        $force = apply_filters('im_force_enqueue_assets', false, $post);
 
-        if ($has_sc || $uses_template) {
+        // 4. Si une des conditions est vraie → on injecte React
+        if ($has_sc || $uses_template || $force) {
             $this->enqueue_vite_assets_and_context();
         }
     }
@@ -249,7 +264,7 @@ final class IM_Interface_Membres
 
     private function enqueue_vite_assets_and_context()
     {
-        $manifest_path = plugin_dir_path(__FILE__) . 'dist/manifest.json';
+        $manifest_path = plugin_dir_path(__FILE__) . 'dist/.vite/manifest.json';
         $manifest = null;
         if (file_exists($manifest_path)) {
             $json = file_get_contents($manifest_path);
@@ -309,6 +324,13 @@ final class IM_Interface_Membres
             'types'       => $types,
             'siteUrl'     => home_url('/'),
         ];
+
+        error_log('[IM DEBUG] manifest path = ' . $manifest_path);
+        if (!file_exists($manifest_path)) {
+            error_log('[IM DEBUG] manifest.json introuvable');
+        }
+
+
         wp_localize_script(self::HANDLE, 'IMAppConfig', $context);
     }
 
