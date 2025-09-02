@@ -1,6 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 
+/* --- Config injectée par le plugin (window.IMAppConfig) --- */
 const cfg = window.IMAppConfig || {
   restUrl: "http://localhost:8000/wp-json/",
   nonce: "",
@@ -22,12 +23,16 @@ const cfg = window.IMAppConfig || {
   },
 };
 
+/* --- Helpers REST --- */
 function v2(path, params = "") {
   const base = cfg.restUrl.replace(/\/$/, "");
   const p = params ? (params.startsWith("?") ? params : "?" + params) : "";
   return `${base}/wp/v2/${path}${p}`;
 }
-
+function custom(path) {
+  const base = cfg.restUrl.replace(/\/$/, "");
+  return `${base}/im/v1/${path}`;
+}
 async function wpFetch(url, options = {}) {
   const res = await fetch(url, {
     ...options,
@@ -53,18 +58,81 @@ async function wpFetch(url, options = {}) {
   }
 }
 
+/* --- API spécifiques --- */
+async function pingMe() {
+  return wpFetch(v2("users/me"));
+}
+async function listMine(type, { limit = 5 } = {}) {
+  const restBase = cfg.types[type]?.rest_base || type;
+  const params = new URLSearchParams({
+    author: String(cfg.currentUser.id),
+    status: ["pending", "publish", "rejected", "draft"].join(","),
+    per_page: String(limit),
+    orderby: "date",
+    order: "desc",
+    _embed: "1",
+  }).toString();
+  return wpFetch(v2(restBase, "?" + params));
+}
+async function createPending(type) {
+  const restBase = cfg.types[type]?.rest_base || type;
+  const payload = {
+    title: `[TEST ${type}] ` + new Date().toLocaleString(),
+    content:
+      "Contenu de test automatique.\n\nCe contenu doit apparaître en 'pending'.",
+    status: cfg.status?.pending || "pending",
+  };
+  return wpFetch(v2(restBase), {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+/* --- Modération (admin/éditeur) --- */
+async function listPending(type, { page = 1, perPage = 10 } = {}) {
+  const restBase = cfg.types[type]?.rest_base || type;
+  const params = new URLSearchParams({
+    status: "pending",
+    page: String(page),
+    per_page: String(perPage),
+    orderby: "date",
+    order: "desc",
+    _embed: "1",
+  }).toString();
+  return wpFetch(v2(restBase, "?" + params));
+}
+async function acceptItem(type, id) {
+  return wpFetch(
+    custom(`moderation/${encodeURIComponent(type)}/${id}/accept`),
+    { method: "POST" }
+  );
+}
+async function rejectItem(type, id) {
+  return wpFetch(
+    custom(`moderation/${encodeURIComponent(type)}/${id}/reject`),
+    { method: "POST" }
+  );
+}
+
+/* --- UI --- */
 function App() {
   const [type, setType] = React.useState(Object.keys(cfg.types)[0] || "post");
   const [log, setLog] = React.useState("");
+  const [pending, setPending] = React.useState({
+    items: [],
+    loading: false,
+    error: "",
+  });
 
   function println(msg) {
     setLog((prev) => (prev ? prev + "\n" : "") + msg);
   }
 
-  async function ping() {
+  /* --- Boutons Smoke Test --- */
+  async function onPing() {
     try {
       println("→ GET /wp/v2/users/me");
-      const data = await wpFetch(v2("users/me"));
+      const data = await pingMe();
       println(
         "← OK users/me : " +
           JSON.stringify(
@@ -78,20 +146,13 @@ function App() {
     }
   }
 
-  async function listMine() {
+  async function onListMine() {
     try {
       const restBase = cfg.types[type]?.rest_base || type;
-      const params = new URLSearchParams({
-        author: String(cfg.currentUser.id),
-        status: ["pending", "publish", "rejected", "draft"].join(","),
-        per_page: "5",
-        orderby: "date",
-        order: "desc",
-        _embed: "1",
-      }).toString();
-
-      println(`→ GET /wp/v2/${restBase}?${params}`);
-      const data = await wpFetch(v2(restBase, "?" + params));
+      println(
+        `→ GET /wp/v2/${restBase}?author=me&status=pending,publish,rejected,draft`
+      );
+      const data = await listMine(type, { limit: 5 });
       println(
         "← OK list (count=" +
           data.length +
@@ -111,7 +172,7 @@ function App() {
     }
   }
 
-  async function createPending() {
+  async function onCreate() {
     try {
       const restBase = cfg.types[type]?.rest_base || type;
       const payload = {
@@ -120,12 +181,8 @@ function App() {
           "Contenu de test automatique.\n\nCe contenu doit apparaître en 'pending'.",
         status: cfg.status?.pending || "pending",
       };
-
       println(`→ POST /wp/v2/${restBase} payload=` + JSON.stringify(payload));
-      const data = await wpFetch(v2(restBase), {
-        method: "POST",
-        body: JSON.stringify(payload),
-      });
+      const data = await createPending(type);
       println(
         "← OK create id=" +
           data.id +
@@ -139,22 +196,64 @@ function App() {
     }
   }
 
-  const types = cfg.types;
+  /* --- Modération --- */
+  const canModerate = !!(
+    cfg.types?.[type]?.caps?.can_publish ||
+    cfg.types?.[type]?.caps?.can_edit_others
+  );
+
+  async function loadPending() {
+    if (!canModerate) return;
+    setPending((s) => ({ ...s, loading: true, error: "" }));
+    try {
+      const data = await listPending(type, { page: 1, perPage: 10 });
+      setPending({ items: data, loading: false, error: "" });
+    } catch (e) {
+      setPending({ items: [], loading: false, error: String(e) });
+    }
+  }
+
+  async function onAccept(id) {
+    try {
+      await acceptItem(type, id);
+      await loadPending();
+      println(`✓ Accepté #${id} (${type})`);
+    } catch (e) {
+      println("✗ accept ERR: " + e.message);
+      alert(e.message);
+    }
+  }
+  async function onReject(id) {
+    try {
+      await rejectItem(type, id);
+      await loadPending();
+      println(`✓ Rejeté #${id} (${type})`);
+    } catch (e) {
+      println("✗ reject ERR: " + e.message);
+      alert(e.message);
+    }
+  }
+
+  React.useEffect(() => {
+    // recharge la file d’attente quand on change de type si on peut modérer
+    if (canModerate) loadPending();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [type, canModerate]);
 
   return (
     <div
       style={{
         maxWidth: 920,
         margin: "32px auto",
-        fontFamily: "system-ui, sans-serif",
+        fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif",
         padding: "0 16px",
         display: "grid",
-        gap: 16,
+        gap: 20,
       }}
     >
-      <h2>Interface Membres — Smoke Test</h2>
+      <h2>Espace membre</h2>
 
-      <div
+      <section
         style={{
           display: "flex",
           gap: 8,
@@ -170,26 +269,95 @@ function App() {
           onChange={(e) => setType(e.target.value)}
           style={{ padding: 6 }}
         >
-          {Object.entries(types).map(([slug, def]) => (
+          {Object.entries(cfg.types).map(([slug, def]) => (
             <option key={slug} value={slug}>
               {def.label || slug}
             </option>
           ))}
         </select>
         <span style={{ fontSize: 12, color: "#666" }}>
-          REST base : <code>{types[type]?.rest_base || type}</code>
+          REST base : <code>{cfg.types[type]?.rest_base || type}</code>
         </span>
-      </div>
+      </section>
 
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-        <button onClick={ping}>🔐 Ping REST (users/me)</button>
-        <button onClick={listMine}>📄 Lister mes contenus</button>
-        <button onClick={createPending}>
+      {/* Smoke test */}
+      <section style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+        <button onClick={onPing}>🔐 Ping REST (users/me)</button>
+        <button onClick={onListMine}>📄 Lister mes contenus</button>
+        <button onClick={onCreate}>
           ➕ Créer un contenu de test (pending)
         </button>
-      </div>
+      </section>
 
-      <div>
+      {/* Modération (admin/éditeur) */}
+      {canModerate ? (
+        <section style={{ display: "grid", gap: 12 }}>
+          <h3>Modération — {cfg.types[type]?.label || type}</h3>
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <button onClick={loadPending}>
+              ⏳ Recharger la file d’attente
+            </button>
+            {pending.loading ? <span>Chargement…</span> : null}
+            {pending.error ? (
+              <span style={{ color: "#b00020" }}>{pending.error}</span>
+            ) : null}
+          </div>
+
+          <ul
+            style={{ listStyle: "none", padding: 0, display: "grid", gap: 12 }}
+          >
+            {pending.items.map((p) => (
+              <li
+                key={p.id}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: 8,
+                  padding: 12,
+                  display: "grid",
+                  gap: 6,
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    gap: 8,
+                  }}
+                >
+                  <strong
+                    dangerouslySetInnerHTML={{
+                      __html: p.title?.rendered || "(Sans titre)",
+                    }}
+                  />
+                  <span style={{ fontSize: 12, color: "#666" }}>
+                    par {p._embedded?.author?.[0]?.name || "?"} — id #{p.id}
+                  </span>
+                </div>
+                <div style={{ fontSize: 12, color: "#666" }}>
+                  Créé le {new Date(p.date).toLocaleString()}
+                </div>
+                <div
+                  style={{ marginTop: 4 }}
+                  dangerouslySetInnerHTML={{
+                    __html: p.excerpt?.rendered || "",
+                  }}
+                />
+                <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                  <button onClick={() => onAccept(p.id)}>✅ Accepter</button>
+                  <button onClick={() => onReject(p.id)}>⛔ Rejeter</button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : (
+        <p style={{ fontSize: 12, color: "#777" }}>
+          (Section modération visible uniquement pour les rôles ayant la
+          capacité de publication sur ce type.)
+        </p>
+      )}
+
+      <section>
         <h3>Console</h3>
         <pre
           style={{
@@ -198,15 +366,17 @@ function App() {
             minHeight: 220,
             whiteSpace: "pre-wrap",
             overflowX: "auto",
+            border: "1px solid #eee",
+            borderRadius: 8,
           }}
         >
           {log}
         </pre>
-      </div>
+      </section>
 
       <div style={{ fontSize: 12, color: "#777" }}>
-        Utilisateur courant : <strong>{cfg.currentUser?.name || "?"}</strong>{" "}
-        (ID {cfg.currentUser?.id ?? "?"})
+        Connecté en tant que <strong>{cfg.currentUser?.name || "?"}</strong> (ID{" "}
+        {cfg.currentUser?.id ?? "?"})
       </div>
     </div>
   );
