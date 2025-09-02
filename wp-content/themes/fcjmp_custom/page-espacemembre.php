@@ -1,13 +1,23 @@
 <?php
 
 /**
- * Template Name: Espace membre React
+ * Template Name: Espace membre React (shortcode forcé)
  */
 get_header();
 ?>
 
-<div id="react-espace-membre">
-    <noscript>Activez JavaScript pour accéder à l’espace membre.</noscript>
-</div>
-<?php
-get_footer();
+<main id="primary" class="site-main">
+    <article class="entry">
+        <header class="entry-header">
+            <h1 class="entry-title"><?php the_title(); ?></h1>
+        </header>
+        <div class="entry-content">
+            <?php
+            // Exécute le shortcode explicitement :
+            echo do_shortcode('[interface_membres]');
+            ?>
+        </div>
+    </article>
+</main>
+
+<?php get_footer(); ?>

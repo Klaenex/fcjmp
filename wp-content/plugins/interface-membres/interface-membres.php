@@ -232,13 +232,20 @@ final class IM_Interface_Membres
 
     public function maybe_enqueue_assets()
     {
-        if (!is_singular()) return;
+        if (! is_singular()) return;
         global $post;
-        if (!$post) return;
-        if (!has_shortcode($post->post_content, self::SHORTCODE)) return;
+        if (! $post) return;
 
-        $this->enqueue_vite_assets_and_context();
+        $has_sc = has_shortcode($post->post_content, self::SHORTCODE);
+
+
+        $uses_template = is_page_template('page-espace-membre.php') || is_page_template('page-espace-membre-react.php');
+
+        if ($has_sc || $uses_template) {
+            $this->enqueue_vite_assets_and_context();
+        }
     }
+
 
     private function enqueue_vite_assets_and_context()
     {
@@ -305,7 +312,9 @@ final class IM_Interface_Membres
         wp_localize_script(self::HANDLE, 'IMAppConfig', $context);
     }
 
-    /* ---------------- Endpoints REST custom (modération générique) ---------------- */
+    /* ---------------- 
+    Endpoints REST custom (modération générique) 
+    ---------------- */
 
     public function register_rest_routes()
     {
