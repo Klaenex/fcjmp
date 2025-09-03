@@ -22,9 +22,7 @@ final class IM_Interface_Membres
     const HANDLE          = 'interface-membres-app';
     const REST_NS         = 'im/v1';
 
-    // Types de contenus gérés dans l’app (slug => config)
     private $content_types = [
-        // post natif
         'post' => [
             'label' => 'Articles',
             'rest_base' => 'posts',
@@ -33,7 +31,6 @@ final class IM_Interface_Membres
             'supports' => ['title', 'editor', 'excerpt', 'thumbnail'],
             'is_builtin' => true,
         ],
-        // CPT offres
         self::CPT_OFFRES => [
             'label' => 'Offres d’emplois',
             'rest_base' => self::CPT_OFFRES,
@@ -42,7 +39,6 @@ final class IM_Interface_Membres
             'supports' => ['title', 'editor', 'excerpt', 'thumbnail'],
             'is_builtin' => false,
         ],
-        // CPT activités
         self::CPT_ACTIVITES => [
             'label' => 'Activités',
             'rest_base' => self::CPT_ACTIVITES,
@@ -67,6 +63,11 @@ final class IM_Interface_Membres
         add_action('wp_enqueue_scripts',      [$this, 'maybe_enqueue_assets']);
 
         add_action('rest_api_init',           [$this, 'register_rest_routes']);
+
+        // 🔒 Verrouillage wp-admin pour les membres
+        add_action('admin_init',              [$this, 'block_admin_for_members'], 1);
+        add_filter('show_admin_bar',          [$this, 'hide_admin_bar_for_members'], 10, 1);
+        add_filter('login_redirect',          [$this, 'redirect_members_after_login'], 10, 3);
     }
 
     /* ---------------- Activation / Désactivation ---------------- */
@@ -81,7 +82,6 @@ final class IM_Interface_Membres
 
     public function on_deactivate()
     {
-        // On garde rôle/statuts/CPT (données).
         flush_rewrite_rules();
     }
 
@@ -89,7 +89,6 @@ final class IM_Interface_Membres
 
     public function ensure_role_caps()
     {
-        // Rôle "membre" : créer/éditer ses contenus, uploader, mais pas publier.
         $base_caps = [
             'read'                   => true,
             'upload_files'           => true,
@@ -112,7 +111,6 @@ final class IM_Interface_Membres
             }
         }
 
-        // Caps CPT OFFRES (capability_type => ['offre','offres'])
         $offres_caps = [
             'edit_offre'              => true,
             'read_offre'              => true,
@@ -120,13 +118,6 @@ final class IM_Interface_Membres
             'edit_offres'             => true,
             'edit_others_offres'      => false,
             'publish_offres'          => false,
-            'read_private_offres'     => false,
-            'delete_offres'           => false,
-            'delete_private_offres'   => false,
-            'delete_published_offres' => false,
-            'delete_others_offres'    => false,
-            'edit_private_offres'     => false,
-            'edit_published_offres'   => false,
         ];
         if ($role) {
             foreach ($offres_caps as $k => $v) {
@@ -134,7 +125,6 @@ final class IM_Interface_Membres
             }
         }
 
-        // Caps CPT ACTIVITES (capability_type => ['activite','activites'])
         $activites_caps = [
             'edit_activite'              => true,
             'read_activite'              => true,
@@ -142,13 +132,6 @@ final class IM_Interface_Membres
             'edit_activites'             => true,
             'edit_others_activites'      => false,
             'publish_activites'          => false,
-            'read_private_activites'     => false,
-            'delete_activites'           => false,
-            'delete_private_activites'   => false,
-            'delete_published_activites' => false,
-            'delete_others_activites'    => false,
-            'edit_private_activites'     => false,
-            'edit_published_activites'   => false,
         ];
         if ($role) {
             foreach ($activites_caps as $k => $v) {
@@ -161,7 +144,6 @@ final class IM_Interface_Membres
 
     public function register_cpts()
     {
-        // OFFRES
         register_post_type(self::CPT_OFFRES, [
             'labels' => [
                 'name' => __('Offres d’emplois', 'interface-membres'),
@@ -169,7 +151,6 @@ final class IM_Interface_Membres
             ],
             'public'       => true,
             'show_ui'      => true,
-            'show_in_menu' => true,
             'has_archive'  => true,
             'rewrite'      => ['slug' => 'offres'],
             'supports'     => ['title', 'editor', 'excerpt', 'thumbnail'],
@@ -179,7 +160,6 @@ final class IM_Interface_Membres
             'capability_type' => ['offre', 'offres'],
         ]);
 
-        // ACTIVITES
         register_post_type(self::CPT_ACTIVITES, [
             'labels' => [
                 'name' => __('Activités', 'interface-membres'),
@@ -187,7 +167,6 @@ final class IM_Interface_Membres
             ],
             'public'       => true,
             'show_ui'      => true,
-            'show_in_menu' => true,
             'has_archive'  => true,
             'rewrite'      => ['slug' => 'activites'],
             'supports'     => ['title', 'editor', 'excerpt', 'thumbnail'],
@@ -203,10 +182,7 @@ final class IM_Interface_Membres
         register_post_status(self::STATUS_REJECTED, [
             'label'                     => _x('Rejeté', 'post status', 'interface-membres'),
             'public'                    => false,
-            'internal'                  => false,
-            'exclude_from_search'       => true,
             'show_in_admin_status_list' => true,
-            'show_in_admin_all_list'    => true,
             'show_in_rest'              => true,
             'label_count'               => _n_noop('Rejeté <span class="count">(%s)</span>', 'Rejetés <span class="count">(%s)</span>', 'interface-membres'),
         ]);
@@ -232,67 +208,54 @@ final class IM_Interface_Membres
 
     public function maybe_enqueue_assets()
     {
-        $this->enqueue_vite_assets_and_context();
-        if (! is_singular()) {
-            return;
-        }
-
+        if (!is_singular()) return;
         global $post;
-        if (! $post) {
-            return;
-        }
+        if (!$post) return;
 
-        // 1. Détection du shortcode dans le contenu
         $has_sc = has_shortcode($post->post_content, self::SHORTCODE);
-
-        // 2. Détection d’un template personnalisé
-        // → ajoute ici tous les fichiers de template que tu utilises pour l’espace membre
         $uses_template = (
             is_page_template('page-espacemembre.php')
             || is_page_template('page-espacemembre-react.php')
         );
 
-        // 3. Possibilité de forcer depuis le thème via un filtre
-        $force = apply_filters('im_force_enqueue_assets', false, $post);
-
-        // 4. Si une des conditions est vraie → on injecte React
-        if ($has_sc || $uses_template || $force) {
+        if ($has_sc || $uses_template) {
             $this->enqueue_vite_assets_and_context();
         }
     }
 
-
     private function enqueue_vite_assets_and_context()
     {
-        $manifest_path = plugin_dir_path(__FILE__) . 'dist/.vite/manifest.json';
-        $manifest = null;
-        if (file_exists($manifest_path)) {
-            $json = file_get_contents($manifest_path);
-            $manifest = $json ? json_decode($json, true) : null;
+        $manifest_path = plugin_dir_path(__FILE__) . 'dist/manifest.json';
+        if (!file_exists($manifest_path)) {
+            $manifest_path = plugin_dir_path(__FILE__) . 'dist/.vite/manifest.json';
         }
 
-        if ($manifest && is_array($manifest)) {
-            $entry = null;
-            foreach ($manifest as $file => $meta) {
-                if (!empty($meta['isEntry'])) {
-                    $entry = $meta;
-                    break;
-                }
-            }
-            if ($entry) {
-                if (!empty($entry['css']) && is_array($entry['css'])) {
-                    foreach ($entry['css'] as $css) {
-                        wp_enqueue_style(self::HANDLE . '-css-' . md5($css), plugins_url('dist/' . $css, __FILE__), [], null);
-                    }
-                }
-                $entry_url = plugins_url('dist/' . $entry['file'], __FILE__);
-                wp_enqueue_script(self::HANDLE, $entry_url, [], null, true);
+        if (!file_exists($manifest_path)) {
+            error_log('[Interface Membres] manifest.json introuvable.');
+            return;
+        }
+
+        $manifest = json_decode(file_get_contents($manifest_path), true);
+        if (!$manifest || !is_array($manifest)) return;
+
+        $entry = null;
+        foreach ($manifest as $file => $meta) {
+            if (!empty($meta['isEntry'])) {
+                $entry = $meta;
+                break;
             }
         }
+        if (!$entry) return;
+
+        if (!empty($entry['css'])) {
+            foreach ($entry['css'] as $css) {
+                wp_enqueue_style(self::HANDLE . '-css-' . md5($css), plugins_url('dist/' . $css, __FILE__));
+            }
+        }
+
+        wp_enqueue_script(self::HANDLE, plugins_url('dist/' . $entry['file'], __FILE__), [], null, true);
 
         $current_user = wp_get_current_user();
-
-        // Filtrer les types autorisés si nécessaire (ici on expose les 3)
         $types = [];
         foreach ($this->content_types as $slug => $def) {
             $types[$slug] = [
@@ -307,7 +270,7 @@ final class IM_Interface_Membres
             ];
         }
 
-        $context = [
+        wp_localize_script(self::HANDLE, 'IMAppConfig', [
             'restUrl'     => esc_url_raw(rest_url()),
             'nonce'       => wp_create_nonce('wp_rest'),
             'currentUser' => [
@@ -323,78 +286,78 @@ final class IM_Interface_Membres
             ],
             'types'       => $types,
             'siteUrl'     => home_url('/'),
-        ];
-
-        error_log('[IM DEBUG] manifest path = ' . $manifest_path);
-        if (!file_exists($manifest_path)) {
-            error_log('[IM DEBUG] manifest.json introuvable');
-        }
-
-
-        wp_localize_script(self::HANDLE, 'IMAppConfig', $context);
+        ]);
     }
 
-    /* ---------------- 
-    Endpoints REST custom (modération générique) 
-    ---------------- */
+    /* ---------------- Endpoints REST custom ---------------- */
 
     public function register_rest_routes()
     {
         register_rest_route(self::REST_NS, '/moderation/(?P<type>[a-z0-9_\/-]+)/(?P<id>\d+)/accept', [
             'methods'             => 'POST',
-            'permission_callback' => function (\WP_REST_Request $req) {
-                $type = sanitize_key($req['type']);
-                $cap  = $this->get_publish_cap_for_type($type);
-                return $cap ? current_user_can($cap) : false;
-            },
-            'callback'            => function (\WP_REST_Request $req) {
-                $type = sanitize_key($req['type']);
-                $id   = (int)$req['id'];
-                $post = get_post($id);
-                if (!$post || $post->post_type !== $type) {
-                    return new \WP_Error('not_found', 'Contenu introuvable', ['status' => 404]);
-                }
-                $updated = wp_update_post(['ID' => $id, 'post_status' => 'publish'], true);
-                if (is_wp_error($updated)) return $updated;
-                return new \WP_REST_Response(['ok' => true, 'id' => $id, 'status' => 'publish'], 200);
-            },
-            'args' => [
-                'type' => ['type' => 'string', 'required' => true],
-                'id'   => ['type' => 'integer', 'required' => true],
-            ],
+            'permission_callback' => fn($req) => current_user_can($this->get_publish_cap_for_type($req['type'])),
+            'callback'            => fn($req) => $this->moderate($req['type'], (int)$req['id'], 'publish'),
         ]);
-
         register_rest_route(self::REST_NS, '/moderation/(?P<type>[a-z0-9_\/-]+)/(?P<id>\d+)/reject', [
             'methods'             => 'POST',
-            'permission_callback' => function (\WP_REST_Request $req) {
-                $type = sanitize_key($req['type']);
-                $cap  = $this->get_publish_cap_for_type($type);
-                return $cap ? current_user_can($cap) : false;
-            },
-            'callback'            => function (\WP_REST_Request $req) {
-                $type = sanitize_key($req['type']);
-                $id   = (int)$req['id'];
-                $post = get_post($id);
-                if (!$post || $post->post_type !== $type) {
-                    return new \WP_Error('not_found', 'Contenu introuvable', ['status' => 404]);
-                }
-                $updated = wp_update_post(['ID' => $id, 'post_status' => self::STATUS_REJECTED], true);
-                if (is_wp_error($updated)) return $updated;
-                return new \WP_REST_Response(['ok' => true, 'id' => $id, 'status' => self::STATUS_REJECTED], 200);
-            },
-            'args' => [
-                'type' => ['type' => 'string', 'required' => true],
-                'id'   => ['type' => 'integer', 'required' => true],
-            ],
+            'permission_callback' => fn($req) => current_user_can($this->get_publish_cap_for_type($req['type'])),
+            'callback'            => fn($req) => $this->moderate($req['type'], (int)$req['id'], self::STATUS_REJECTED),
         ]);
+    }
+
+    private function moderate($type, $id, $status)
+    {
+        $post = get_post($id);
+        if (!$post || $post->post_type !== $type) {
+            return new \WP_Error('not_found', 'Contenu introuvable', ['status' => 404]);
+        }
+        $updated = wp_update_post(['ID' => $id, 'post_status' => $status], true);
+        if (is_wp_error($updated)) return $updated;
+        return new \WP_REST_Response(['ok' => true, 'id' => $id, 'status' => $status], 200);
     }
 
     private function get_publish_cap_for_type($type)
     {
-        if ($type === 'post') return 'publish_posts';
-        if ($type === self::CPT_OFFRES) return 'publish_offres';
-        if ($type === self::CPT_ACTIVITES) return 'publish_activites';
-        return null;
+        return match ($type) {
+            'post' => 'publish_posts',
+            self::CPT_OFFRES => 'publish_offres',
+            self::CPT_ACTIVITES => 'publish_activites',
+            default => null,
+        };
+    }
+
+    /* ---------------- Restrictions wp-admin ---------------- */
+
+    private function current_user_is_member()
+    {
+        if (!is_user_logged_in()) return false;
+        $u = wp_get_current_user();
+        return in_array(self::ROLE, (array)$u->roles, true);
+    }
+
+    public function block_admin_for_members()
+    {
+        if (!$this->current_user_is_member()) return;
+
+        $is_ajax = defined('DOING_AJAX') && DOING_AJAX;
+        $is_rest = defined('REST_REQUEST') && REST_REQUEST;
+        if ($is_ajax || $is_rest) return;
+
+        wp_safe_redirect(home_url('/espace-membre/'));
+        exit;
+    }
+
+    public function hide_admin_bar_for_members($show)
+    {
+        return $this->current_user_is_member() ? false : $show;
+    }
+
+    public function redirect_members_after_login($redirect_to, $requested, $user)
+    {
+        if ($user instanceof \WP_User && in_array(self::ROLE, $user->roles, true)) {
+            return home_url('/espace-membre/');
+        }
+        return $redirect_to;
     }
 }
 
