@@ -23,31 +23,24 @@ final class IM_Interface_Membres
     const REST_NS         = 'im/v1';
 
     private $content_types = [
-        'post' => [
-            'label' => 'Articles',
-            'rest_base' => 'posts',
-            'cap_publish' => 'publish_posts',
-            'cap_edit_others' => 'edit_others_posts',
-            'supports' => ['title', 'editor', 'excerpt', 'thumbnail'],
-            'is_builtin' => true,
-        ],
         self::CPT_OFFRES => [
-            'label' => 'Offres d’emplois',
-            'rest_base' => self::CPT_OFFRES,
-            'cap_publish' => 'publish_offres',
+            'label'           => 'Offres d’emplois',
+            'rest_base'       => self::CPT_OFFRES,
+            'cap_publish'     => 'publish_offres',
             'cap_edit_others' => 'edit_others_offres',
-            'supports' => ['title', 'editor', 'excerpt', 'thumbnail'],
-            'is_builtin' => false,
+            'supports'        => ['title', 'editor', 'excerpt', 'thumbnail'],
+            'is_builtin'      => false,
         ],
         self::CPT_ACTIVITES => [
-            'label' => 'Activités',
-            'rest_base' => self::CPT_ACTIVITES,
-            'cap_publish' => 'publish_activites',
+            'label'           => 'Activités',
+            'rest_base'       => self::CPT_ACTIVITES,
+            'cap_publish'     => 'publish_activites',
             'cap_edit_others' => 'edit_others_activites',
-            'supports' => ['title', 'editor', 'excerpt', 'thumbnail'],
-            'is_builtin' => false,
+            'supports'        => ['title', 'editor', 'excerpt', 'thumbnail'],
+            'is_builtin'      => false,
         ],
     ];
+
 
     public function __construct()
     {
@@ -92,7 +85,7 @@ final class IM_Interface_Membres
         $base_caps = [
             'read'                   => true,
             'upload_files'           => true,
-            'edit_posts'             => true,
+            'edit_posts'             => false,
             'delete_posts'           => false,
             'publish_posts'          => false,
             'edit_published_posts'   => false,
@@ -144,13 +137,15 @@ final class IM_Interface_Membres
 
     public function register_cpts()
     {
+        // CPT Offres d’emploi
         register_post_type(self::CPT_OFFRES, [
             'labels' => [
-                'name' => __('Offres d’emplois', 'interface-membres'),
+                'name'          => __('Offres d’emplois', 'interface-membres'),
                 'singular_name' => __('Offre d’emploi', 'interface-membres'),
             ],
             'public'       => true,
             'show_ui'      => true,
+            'show_in_menu' => true,
             'has_archive'  => true,
             'rewrite'      => ['slug' => 'offres'],
             'supports'     => ['title', 'editor', 'excerpt', 'thumbnail'],
@@ -160,13 +155,15 @@ final class IM_Interface_Membres
             'capability_type' => ['offre', 'offres'],
         ]);
 
+        // CPT Activités
         register_post_type(self::CPT_ACTIVITES, [
             'labels' => [
-                'name' => __('Activités', 'interface-membres'),
+                'name'          => __('Activités', 'interface-membres'),
                 'singular_name' => __('Activité', 'interface-membres'),
             ],
             'public'       => true,
             'show_ui'      => true,
+            'show_in_menu' => true,
             'has_archive'  => true,
             'rewrite'      => ['slug' => 'activites'],
             'supports'     => ['title', 'editor', 'excerpt', 'thumbnail'],
@@ -176,6 +173,7 @@ final class IM_Interface_Membres
             'capability_type' => ['activite', 'activites'],
         ]);
     }
+
 
     public function register_rejected_status()
     {
@@ -319,12 +317,12 @@ final class IM_Interface_Membres
     private function get_publish_cap_for_type($type)
     {
         return match ($type) {
-            'post' => 'publish_posts',
-            self::CPT_OFFRES => 'publish_offres',
+            self::CPT_OFFRES    => 'publish_offres',
             self::CPT_ACTIVITES => 'publish_activites',
-            default => null,
+            default             => null,
         };
     }
+
 
     /* ---------------- Restrictions wp-admin ---------------- */
 

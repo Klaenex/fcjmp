@@ -7,17 +7,18 @@ get_header();
 ?>
 
 <main id="primary" class="site-main">
-    <article class="entry">
-        <header class="entry-header">
-            <h1 class="entry-title"><?php the_title(); ?></h1>
-        </header>
-        <div class="entry-content">
-            <?php
-            // Exécute le shortcode explicitement :
-            echo do_shortcode('[interface_membres]');
-            ?>
+
+    <section class="section section-green ">
+        <div class="section-green_wrap">
+            <h1 class="title title-big">Espace membre</h1>
         </div>
-    </article>
+    </section>
+    <section class="content">
+        <?php
+        // Exécute le shortcode explicitement :
+        echo do_shortcode('[interface_membres]');
+        ?>
+    </section>
 </main>
 
 <?php get_footer(); ?>
