@@ -1,6 +1,6 @@
 import React from "react";
 import { cfg } from "../config";
-import { createOffre } from "../api/offres";
+import { createOffre } from "../api/content";
 
 /* Options exemples — adapte si tu as des listes officielles */
 const TYPES_OFFRE = ["CDI", "CDD", "Stage", "Volontariat", "Autre"];
