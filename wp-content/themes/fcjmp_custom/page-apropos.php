@@ -12,8 +12,16 @@ get_header();
 </section>
 <section class="section">
     <div class="content">
-        <p>Créée en 1970, la Fédération des Centres de Jeunes en Milieu Populaire (FCJMP) est une organisation de jeunesse pluraliste qui fédère des Centres de Jeunes engagés dans l’animation socioculturelle. Son action s’inscrit dans une approche spécifique, attentive aux réalités économiques, sociales et culturelles des jeunes.</p>
-        <p>La FCJMP regroupe et représente des Maisons de Jeunes, des Centres de Rencontre et d’Hébergement ainsi que des Centres d’Expressions et de Créativité, avec une ambition forte : garantir à chaque jeune un accès équitable aux espaces d’émancipation et de participation.</p>
+
+        <p>Fondée en 1970, la Fédération des Centres de Jeunes en Milieu Populaire est une organisation pluraliste reconnue par la Communauté française comme organisme de jeunesse dans le cadre du Décret du 26 mars 2009 et comme Fédération de Centres de Jeunes dans le cadre du Décret du 20 juillet 2000.
+        </p>
+        <p>Elle rassemble principalement des Centres de Jeunes reconnus tels que des Maisons de Jeunes, des Centres de Rencontre et d’Hébergement et des Centres d’Expression et de Créativité qui développent un travail d’animation socioculturelle spécifique qui tient compte des jeunes dont les conditions économiques, sociales et culturelles sont les moins favorables.
+        </p>
+        <p>Ses objectifs particuliers consistent à soutenir l’action des Centres de Jeunes et à favoriser le travail d’animation en milieu populaire. Ses actions visent à sensibiliser les pouvoirs publics aux problèmes de la jeunesse défavorisée et à permettre le développement d’une politique socioculturelle d’égalité des chances.
+        </p>
+        <p>La F.C.J.M.P. développe des projets locaux d’actions communautaires qui contribuent à renforcer l’action de ses membres. Elle favorise le développement pédagogique et le travail de réseau des centres de jeunes. Elle assure un soutien associatif des centres en matière administrative, comptable, logistique, fiscale, … ainsi qu’un accompagnement professionnel des animateurs en matière de formation, d’animation, d’information, de conseils, ….
+        </p>
+
     </div>
 
 
