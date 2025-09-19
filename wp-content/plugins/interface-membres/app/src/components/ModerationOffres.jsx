@@ -1,5 +1,5 @@
 import React from "react";
-import { listOffresPending, accepterOffre, rejeterOffre } from "../api/offres";
+import { listOffresPending, accepterOffre, rejeterOffre } from "../api/content";
 import { cfg } from "../config";
 
 const canModerate = !!(

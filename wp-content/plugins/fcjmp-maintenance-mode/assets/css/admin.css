@@ -1,0 +1,20 @@
+.fcjmp-admin-status {
+  margin: 8px 0 16px;
+}
+.fcjmp-admin-on {
+  color: #d63638;
+  font-weight: 600;
+}
+.fcjmp-admin-off {
+  color: #46b450;
+  font-weight: 600;
+}
+
+#fcjmp-export {
+  width: 100%;
+  max-width: 820px;
+}
+textarea[name="fcjmp_mm_options[import_json]"] {
+  width: 100%;
+  max-width: 820px;
+}

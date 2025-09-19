@@ -10,6 +10,20 @@ export async function createItem(type, { title, content, meta, status }) {
   });
 }
 
+/**
+ * Créer une "Offre" (CPT: offres)
+ * Compatible avec deux payloads:
+ *  - { title, content, meta, status }
+ *  - { titre, contenu, meta, status }
+ */
+export async function createOffre(payload) {
+  const title = payload?.title ?? payload?.titre ?? "";
+  const content = payload?.content ?? payload?.contenu ?? "";
+  const meta = payload?.meta ?? {};
+  const status = payload?.status ?? "pending";
+  return createItem("offres", { title, content, meta, status });
+}
+
 /** Lister MES contenus pour un type donné */
 export async function listMine(
   type,
@@ -53,16 +67,43 @@ export async function listPending(type, { page = 1, perPage = 10 } = {}) {
   return wpFetch(v2(restBase, "?" + params));
 }
 
-/** Actions de modération */
+/** Actions de modération (routes custom) */
 export async function acceptItem(type, id) {
   return wpFetch(
     custom(`moderation/${encodeURIComponent(type)}/${id}/accept`),
-    { method: "POST" }
+    {
+      method: "POST",
+    }
   );
 }
 export async function rejectItem(type, id) {
   return wpFetch(
     custom(`moderation/${encodeURIComponent(type)}/${id}/reject`),
-    { method: "POST" }
+    {
+      method: "POST",
+    }
   );
 }
+
+/* ================================
+   Wrappers spécifiques au CPT "offres"
+   (compatibles avec ModerationOffres.jsx)
+   ================================ */
+
+/** Liste des offres en attente (sans passer le type à chaque fois) */
+export async function listOffresPending({ page = 1, perPage = 10 } = {}) {
+  return listPending("offres", { page, perPage });
+}
+
+/** Accepter une offre */
+export async function accepterOffre(id) {
+  return acceptItem("offres", id);
+}
+
+/** Rejeter une offre */
+export async function rejeterOffre(id) {
+  return rejectItem("offres", id);
+}
+
+// Alias optionnel si tu veux garder des imports existants ailleurs
+export { createItem as createPostGeneric };

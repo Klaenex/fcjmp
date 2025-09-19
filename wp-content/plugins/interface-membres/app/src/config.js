@@ -1,34 +1,21 @@
-const injected = typeof window !== "undefined" ? window.IMAppConfig : null;
-
-export const cfg = injected || {
-  restUrl: "http://localhost:8000/wp-json/",
-  nonce: "",
-  currentUser: { id: 0, name: "Dev", roles: [] },
+export const cfg = {
+  apiBase: window?.fcjmpApiBase || "/wp-json",
+  nonce: window?.fcjmpNonce || "",
+  currentUser: window?.fcjmpCurrentUser || { id: 0 },
+  // Ajout d’un mapping de statuts pour éviter cfg.status.undefined
   status: {
-    draft: "draft",
     pending: "pending",
+    draft: "draft",
     publish: "publish",
     rejected: "rejected",
   },
-  types: {
-    offres: {
-      label: "Offres",
-      rest_base: "offres",
-      caps: { can_publish: false, can_edit_others: false },
-    },
-    activites: {
-      label: "Activités",
-      rest_base: "activites",
-      caps: { can_publish: false, can_edit_others: false },
-    },
-  },
-  siteUrl: "/",
 };
 
 export function getRestBaseFor(type) {
-  return cfg.types?.[type]?.rest_base || type;
-}
-export function canModerate(type) {
-  const caps = cfg.types?.[type]?.caps || {};
-  return !!(caps.can_publish || caps.can_edit_others);
+  const map = {
+    offres: "offres",
+    posts: "posts",
+    pages: "pages",
+  };
+  return map[type] || type;
 }

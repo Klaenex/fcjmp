@@ -1,33 +1,35 @@
 import { cfg } from "../config";
 
-// Construit une URL wp/v2: v2('offres'), v2('offres', '?page=2')
-export function v2(resource, suffix = "") {
-  const base = cfg.restUrl?.replace(/\/+$/, "");
-  return `${base}/wp/v2/${resource}${suffix}`;
-}
+// Nettoie le trailing slash pour éviter //wp/v2
+const base = (cfg.apiBase || "/wp-json").replace(/\/$/, "");
 
-// Namespace REST custom (pour /im/v1/…)
-export function custom(path) {
-  const base = cfg.restUrl?.replace(/\/+$/, "");
-  return `${base}/im/v1/${path}`;
-}
+export const v2 = (path, query = "") => `${base}/wp/v2/${path}${query || ""}`;
+export const custom = (path, query = "") =>
+  `${base}/fcjmp/v1/${path}${query || ""}`;
 
-// Fetch avec nonce + JSON
-export async function wpFetch(url, init = {}) {
-  const headers = new Headers(init.headers || {});
-  headers.set("Content-Type", "application/json");
-  if (cfg?.nonce) headers.set("X-WP-Nonce", cfg.nonce);
+export async function wpFetch(url, options = {}) {
+  const res = await fetch(url, {
+    method: options.method || "GET",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      "X-WP-Nonce": cfg.nonce || "",
+      ...(options.headers || {}),
+    },
+    body: options.body,
+  });
 
-  const res = await fetch(url, { ...init, headers, credentials: "include" });
   if (!res.ok) {
-    let msg = `HTTP ${res.status}`;
+    let msg = `${res.status} ${res.statusText}`;
     try {
       const data = await res.json();
-      if (data?.message) msg = data.message;
+      if (data && (data.message || data.code)) {
+        msg += ` — ${data.message || data.code}`;
+      }
     } catch (_) {}
     throw new Error(msg);
   }
-  const contentType = res.headers.get("content-type") || "";
-  if (contentType.includes("application/json")) return res.json();
-  return res.text();
+
+  const ct = res.headers.get("content-type") || "";
+  return ct.includes("application/json") ? res.json() : res.text();
 }

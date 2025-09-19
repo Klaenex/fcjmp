@@ -1,5 +1,5 @@
 import React from "react";
-import { listMesOffres } from "../api/offres";
+import { listMesOffres } from "../api/content";
 
 function Status({ s }) {
   const label =
