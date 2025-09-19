@@ -2,8 +2,8 @@
 
 /**
  * Plugin Name: FCJMP Maintenance Mode
- * Description: Mode maintenance avec whitelist par utilisateurs (triés par rôle), planification, barre admin, et page publique stylée. Réglages réservés aux administrateurs.
- * Version:     3.0.0
+ * Description: Mode maintenance avec whitelist utilisateurs, planification, barre admin, prévisualisation dans l’admin. Réglages réservés aux administrateurs.
+ * Version:     3.2.0
  * Author:      FCJMP
  */
 
@@ -14,15 +14,16 @@ if (!defined('ABSPATH')) {
 define('FCJMP_MM_FILE', __FILE__);
 define('FCJMP_MM_DIR', plugin_dir_path(__FILE__));
 define('FCJMP_MM_URL', plugin_dir_url(__FILE__));
-define('FCJMP_MM_VER', '3.0.0');
+define('FCJMP_MM_VER', '3.2.0');
 
-// Chargement des modules
+// Modules
 require_once FCJMP_MM_DIR . 'includes/helpers.php';
+require_once FCJMP_MM_DIR . 'includes/template.php';
 require_once FCJMP_MM_DIR . 'includes/blocker.php';
 require_once FCJMP_MM_DIR . 'includes/admin-bar.php';
 require_once FCJMP_MM_DIR . 'includes/settings-page.php';
 
-// Activer les defaults à l’activation
+// Defaults à l’activation
 register_activation_hook(FCJMP_MM_FILE, function () {
     $current = get_option('fcjmp_mm_options');
     if (!$current) {
