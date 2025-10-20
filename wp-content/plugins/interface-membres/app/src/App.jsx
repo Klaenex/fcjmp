@@ -33,7 +33,6 @@ export default function App() {
             className="im-card im-row"
             style={{ justifyContent: "space-between" }}
           >
-            <h2>Espace membre</h2>
             <div>
               Connecté :{" "}
               <strong>{cfg.currentUser?.name || "Utilisateur"}</strong>
