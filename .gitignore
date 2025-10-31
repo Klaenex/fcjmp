@@ -38,3 +38,12 @@ build/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+
+
+# MacOS files
+.DS_Store
+
+
+# smtp-server files
+smtp.php
