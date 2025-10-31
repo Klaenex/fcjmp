@@ -46,4 +46,4 @@ build/
 
 
 # smtp-server files
-smtp.php
+mu-plugins/
