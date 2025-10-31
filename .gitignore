@@ -46,4 +46,4 @@ build/
 
 
 # smtp-server files
-mu-plugins/
+wp-content/mu-plugins/
