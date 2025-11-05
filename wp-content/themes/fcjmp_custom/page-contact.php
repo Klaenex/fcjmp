@@ -34,6 +34,46 @@ get_header();
             </gmp-map>
         </div>
 
+        <ul class="wrapper wrapper-equipe">
+            <li class="equipe">
+                <img src="" alt="">
+                <p class="nom">Pierre Evrard</p>
+                <p>Directeur</p>
+                <div>
+                    <a href="mailto:pierre.evrard@fcjmp.be"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/mail.svg" alt=""></a>
+                </div>
+            </li>
+            <li class="equipe"><img src="" alt="">
+                <p></p>
+                <p></p>
+            </li>
+            <li class="equipe"><img src="" alt="">
+                <p></p>
+                <p></p>
+            </li>
+            <li class="equipe"><img src="" alt="">
+                <p></p>
+                <p></p>
+            </li>
+            <li class="equipe"><img src="" alt="">
+                <p></p>
+                <p></p>
+            </li>
+            <li class="equipe"><img src="" alt="">
+                <p></p>
+                <p></p>
+            </li>
+            <li class="equipe"><img src="" alt="">
+                <p></p>
+                <p></p>
+            </li>
+            <li class="equipe"><img src="" alt="">
+                <p></p>
+                <p></p>
+            </li>
+        </ul>
+
+
     </div>
 
 </section>

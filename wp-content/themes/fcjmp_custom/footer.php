@@ -86,10 +86,10 @@
             <p class="title title-medium title-footer">Nos partenaires</p>
             <ul class="list list-partnair list-partnair_fixed">
                 <li class="list-partnair-item">
-                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/logo_SEFoP_positif.png" alt="Logo SEFoP" loading="lazy">
+                    <a href="https://sefop.org/" target="_blank" rel="noopener noreferrer"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/logo_SEFoP_positif.png" alt="Logo SEFoP" loading="lazy"></a>
                 </li>
                 <li class="list-partnair-item">
-                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/relief.png" alt="Logo Relief" loading="lazy">
+                    <a href="https://www.relie-f.be/" target="_blank" rel="noopener noreferrer"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo/relief.png" alt="Logo Relief" loading="lazy"></a>
                 </li>
             </ul>
         </div>

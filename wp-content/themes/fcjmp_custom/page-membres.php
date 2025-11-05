@@ -100,7 +100,7 @@ $apiKey = $_ENV['API_MONDAY'];
                     <h3>${member.name}</h3>
                 </span>
                 <span>
-                    <p>Email: ${member.column_values[2]?.text || "N/A"}</p>
+                    
                     <p>Téléphone: ${member.column_values[4]?.text || "N/A"}</p>
                     ${
                       member.column_values[3]?.text
@@ -109,6 +109,8 @@ $apiKey = $_ENV['API_MONDAY'];
                            </a>`
                         : ""
                     }
+                    <a href="mailto:${member.column_values[2]?.text || "N/A"}" > <img src="${templateDirectoryUri}/assets/img/mail.svg" alt="Google Maps"/> </a>  
+
                 </span>
             `;
 
