@@ -18,8 +18,8 @@ get_header();
         <ul class="list list-mission">
             <li>
                 <div>
-                    <h2 class="title title-medium">Soutenir et accompagner les Centres de Jeunes</h2>
-                    <p>La FCJMP renforce les capacités des Maisons et Centres de Jeunes en leur apportant un appui pédagogique, administratif et logistique adapté à leurs réalités de terrain.
+                    <h2 class="title title-medium">Coordination & mise en réseau</h2>
+                    <p>La FCJMP met en lien ses centres membres pour créer des synergies, favoriser les partenariats et renforcer les dynamiques régionales.
                     </p>
                 </div>
                 <img src="<?php echo get_template_directory_uri(); ?>/assets/img/img_1_mission.svg" loading="lazy">
@@ -27,9 +27,9 @@ get_header();
             </li>
             <li>
                 <div>
-                    <h2 class="title title-medium">Former et professionnaliser les équipes d’animation
+                    <h2 class="title title-medium">Formations internes et externes
                     </h2>
-                    <p>Elle propose un programme de formation continue destiné aux animateurs, volontaires et administrateurs, en lien avec les enjeux de l’égalité des chances en milieu populaire.</p>
+                    <p>La FCJMP propose des formations adaptées aux réalités de terrain pour professionnaliser les animateurs, coordinateurs et administrateurs.</p>
                 </div>
                 <img src="<?php echo get_template_directory_uri(); ?>/assets/img/img_2_mission.svg" loading="lazy">
             </li>
@@ -43,15 +43,22 @@ get_header();
         <ul class="list list-mission">
             <li>
                 <div>
-                    <h2 class="title title-medium">Développer des projets locaux et renforcer le travail en réseau</h2>
-                    <p>La fédération initie et soutient des actions communautaires locales, favorisant l’échange de pratiques, la mise en réseau et la création de synergies entre professionnels.</p>
+                    <h2 class="title title-medium">Service aux membres</h2>
+                    <p>La FCJMP offre à ses membres un accompagnement concret et développe des outils sur mesure pour faciliter leur action locale.</p>
                 </div>
                 <img src="<?php echo get_template_directory_uri(); ?>/assets/img/img_3_mission.svg" loading="lazy">
             </li>
             <li>
                 <div>
-                    <h2 class="title title-medium">Informer et valoriser les pratiques d’éducation populaire</h2>
-                    <p>Elle conçoit et diffuse des outils d’information et de sensibilisation, tout en relayant auprès des pouvoirs publics les réalités et enjeux vécus par les jeunes en milieu populaire.</p>
+                    <h2 class="title title-medium">Accompagnement pédagogique</h2>
+                    <p>Elle accompagne les équipes dans la conception, l’évaluation et la mise en œuvre de leurs projets.</p>
+                </div>
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/img_4_mission.svg" loading="lazy">
+            </li>
+            <li>
+                <div>
+                    <h2 class="title title-medium">Réalisation et gestion de projets</h2>
+                    <p>Elle initie et coordonne des projets innovants et structurants en réponse aux besoins du secteur jeunesse et des jeunes en milieu populaire.</p>
                 </div>
                 <img src="<?php echo get_template_directory_uri(); ?>/assets/img/img_4_mission.svg" loading="lazy">
             </li>
@@ -66,17 +73,17 @@ get_header();
         <ul class="list list-mission">
             <li>
                 <div>
-                    <h2 class="title title-medium">Créer des outils pédagogiques et impulser de nouvelles dynamiques
+                    <h2 class="title title-medium">Réalisation d’outils d’information
                     </h2>
-                    <p>La FCJMP développe des supports pédagogiques et théoriques innovants, adaptés aux besoins du terrain et co-construits avec les professionnels du secteur.</p>
+                    <p>La FCJMP produit et diffuse des outils d’information et de réflexion, des supports pédagogiques – papier et numérique – pour renforcer les compétences des acteurs et des jeunes.</p>
                 </div>
                 <img src="<?php echo get_template_directory_uri(); ?>/assets/img/img_5_mission.svg" loading="lazy">
             </li>
             <li>
                 <div>
-                    <h2 class="title title-medium">Représenter et défendre les intérêts du secteur jeunesse
+                    <h2 class="title title-medium">Représentation sectorielle
                     </h2>
-                    <p>Elle porte la voix des Centres de Jeunes auprès des instances décisionnelles et des partenaires socio-politiques, en défendant leurs droits et leurs conditions d’action.</p>
+                    <p>Elle défend les intérêts des centres et des jeunes en milieu populaire en portant leur voix auprès des pouvoirs publics et des instances consultatives.</p>
                 </div>
                 <img src="<?php echo get_template_directory_uri(); ?>/assets/img/img_6_mission.svg" loading="lazy">
             </li>
