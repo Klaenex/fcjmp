@@ -33,43 +33,102 @@ get_header();
                 <gmp-advanced-marker position="50.8393669128418,4.3469672203063965" title="My location"></gmp-advanced-marker>
             </gmp-map>
         </div>
-
+        <h2 class="title title-big title-equipe">
+            L’équipe communautaire
+        </h2>
         <ul class="wrapper wrapper-equipe">
+
             <li class="equipe">
-                <img src="" alt="">
-                <p class="nom">Pierre Evrard</p>
-                <p>Directeur</p>
+                <img src="https://picsum.photos/200/300.webp" alt="">
+                <p class="name">Pierre Evrard</p>
+                <p>Direction</p>
                 <div>
                     <a href="mailto:pierre.evrard@fcjmp.be"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/mail.svg" alt=""></a>
                 </div>
             </li>
-            <li class="equipe"><img src="" alt="">
-                <p></p>
-                <p></p>
+            <li class="equipe"><img src="https://picsum.photos/200/300.webp" alt="">
+                <p class="name">Ludovic Emmada</p>
+                <p>Pédagogique</p>
+                <div>
+                    <a href="mailto:ludovic.emmada@fcjmp.be"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/mail.svg" alt=""></a>
+                </div>
             </li>
-            <li class="equipe"><img src="" alt="">
-                <p></p>
-                <p></p>
+            <li class="equipe"><img src="https://picsum.photos/200/300.webp" alt="">
+                <p class="name">Eloïse Roekaerts</p>
+                <p>Pédagogique</p>
+                <div>
+                    <a href="mailto:eloise.roekaerts@fcjmp.be"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/mail.svg" alt=""></a>
+                </div>
             </li>
-            <li class="equipe"><img src="" alt="">
-                <p></p>
-                <p></p>
+            <li class="equipe"><img src="https://picsum.photos/200/300.webp" alt="">
+                <p class="name">Vincenzo Cuozzo</p>
+                <p>Communication</p>
+                <div>
+                    <a href="mailto:vincent.cuozzo@fcjmp.be"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/mail.svg" alt=""></a>
+                </div>
             </li>
-            <li class="equipe"><img src="" alt="">
-                <p></p>
-                <p></p>
+            <li class="equipe"><img src="https://picsum.photos/200/300.webp" alt="">
+                <p class="name">Nathalie Miecret</p>
+                <p>Suivis de centres</p>
+                <div>
+                    <a href="mailto:nathalie.miecret@fcjmp.be"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/mail.svg" alt=""></a>
+                    <a href="tel:0477884754"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/phone.svg" alt=""></a>
+                </div>
             </li>
-            <li class="equipe"><img src="" alt="">
-                <p></p>
-                <p></p>
+            <li class="equipe"><img src="https://picsum.photos/200/300.webp" alt="">
+                <p class="name">Odile Jenkins</p>
+                <p>Suivis de centres</p>
+                <div>
+                    <a href="mailto:odile.jenkins@fcjmp.be"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/mail.svg" alt=""></a>
+                    <a href="tel:0477884751"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/phone.svg" alt=""></a>
+                </div>
             </li>
-            <li class="equipe"><img src="" alt="">
-                <p></p>
-                <p></p>
+            <li class="equipe"><img src="https://picsum.photos/200/300.webp" alt="">
+                <p class="name">Benjamin Mignot</p>
+                <p>Chargé de projet "Santé"</p>
+                <div>
+                    <a href="mailto:benjamin.mignot@fcjmp.be"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/mail.svg" alt=""></a>
+                </div>
             </li>
-            <li class="equipe"><img src="" alt="">
-                <p></p>
-                <p></p>
+            <li class="equipe"><img src="https://picsum.photos/200/300.webp" alt="">
+                <p class="name">Emilie Bastin</p>
+                <p>Secrétariat</p>
+                <div>
+                    <a href="mailto:emilie.bastin@fcjmp.be"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/mail.svg" alt=""></a>
+
+                </div>
+            </li>
+            <li class="equipe"><img src="https://picsum.photos/200/300.webp" alt="">
+                <p class="name">Georgios Tzoumacas </p>
+                <p>Comptabilité</p>
+                <div>
+                    <a href="mailto:infos@fcjmp.be"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/mail.svg" alt=""></a>
+
+                </div>
+            </li>
+            <li class="equipe"><img src="https://picsum.photos/200/300.webp" alt="">
+                <p class="name">Guillaume Vanden Borre</p>
+                <p>Comptabilité</p>
+                <div>
+                    <a href="mailto:infos@fcjmp.be"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/mail.svg" alt=""></a>
+
+                </div>
+            </li>
+            <li class="equipe"><img src="https://picsum.photos/200/300.webp" alt="">
+                <p class="name">Yenny Rojas Brinez</p>
+                <p>Comptabilité</p>
+                <div>
+                    <a href="mailto:infos@fcjmp.be"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/mail.svg" alt=""></a>
+
+                </div>
+            </li>
+            <li class="equipe"><img src="https://picsum.photos/200/300.webp" alt="">
+                <p class="name">Aysima Kargin</p>
+                <p>Comptabilité</p>
+                <div>
+                    <a href="mailto:infos@fcjmp.be"><img src="<?php echo get_template_directory_uri(); ?>/assets/img/mail.svg" alt=""></a>
+
+                </div>
             </li>
         </ul>
 
