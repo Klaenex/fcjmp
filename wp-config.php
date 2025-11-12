@@ -86,6 +86,31 @@ define('WP_DEBUG', false);
 define('WP_ENVIRONMENT_TYPE', 'development');
 
 /* That's all, stop editing! Happy publishing. */
+/**
+ * Chargement du fichier .env (API keys, config sensibles)
+ */
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+	require_once __DIR__ . '/vendor/autoload.php';
+}
+
+if (class_exists('Dotenv\\Dotenv')) {
+	$env_paths = [
+		__DIR__ . '/.env',
+		__DIR__ . '/wp-content/themes/fcjmp_custom/.env',
+	];
+	foreach ($env_paths as $path) {
+		if (file_exists($path)) {
+			$dotenv = Dotenv\Dotenv::createImmutable(dirname($path));
+			$dotenv->safeLoad();
+			break;
+		}
+	}
+}
+
+// Si ton .env définit WP_ENVIRONMENT_TYPE, on le prend
+if (!empty($_ENV['WP_ENVIRONMENT_TYPE'])) {
+	define('WP_ENVIRONMENT_TYPE', $_ENV['WP_ENVIRONMENT_TYPE']);
+}
 
 /** Absolute path to the WordPress directory. */
 if (! defined('ABSPATH')) {
