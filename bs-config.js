@@ -1,19 +1,22 @@
-// bs-config.js (à la racine)
+// bs-config.js
 module.exports = {
-  proxy: "http://localhost/fcjmp/",
+  // Adresse du WordPress local (via XAMPP)
+  proxy: "http://localhost/fcjmp",
 
-  // On watche uniquement :
-  //  - Le CSS global généré par Sass
-  //  - Le build React (JS + CSS)
-  //  - Tes fichiers PHP de thème
+  // Fichiers à surveiller
   files: [
-    "wp-content/themes/fcjmp_custom/assets/css/**/*.css", // SCSS -> CSS
-    "wp-content/themes/fcjmp_custom/espace-membre/index.js", // React JS
-    "wp-content/themes/fcjmp_custom/espace-membre/index.css", // React CSS
+    "wp-content/themes/fcjmp_custom/assets/css/**/*.css", // CSS compilé
+    "wp-content/themes/fcjmp_custom/espace-membre/**/*.{js,css}", // Build React complet
     "wp-content/themes/fcjmp_custom/**/*.php", // Templates PHP
   ],
 
-  notify: false,
-  open: true,
-  port: 3000,
+  // Options BrowserSync
+  notify: false, // Pas de popup
+  open: false, // Évite d’ouvrir plusieurs onglets
+  port: 3000, // Port par défaut
+  ui: { port: 3001 },
+  ghostMode: false, // Pas de mirroring entre navigateurs
+  logConnections: true,
+  logPrefix: "FCJMP",
+  reloadDelay: 200, // léger délai pour la stabilité PHP
 };
