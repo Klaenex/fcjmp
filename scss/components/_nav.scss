@@ -40,8 +40,8 @@
         .sub-menu {
           opacity: 1 !important;
           visibility: visible !important;
-
-          height: 100% !important;
+          pointer-events: auto !important;
+          height: auto !important;
         }
       }
     }
@@ -54,7 +54,8 @@
       display: flex;
       flex-flow: column nowrap;
       gap: 0.7rem;
-
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
       @include md {
         transition: opacity 0.3s ease, transform 0.3s ease;
         opacity: 0;
@@ -102,7 +103,13 @@
     transform: translateY(-20px);
   }
 }
-
+.menu-item-has-children:focus {
+  .sub-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
 .menu-item-has-children:hover {
   @include md {
     .sub-menu {
