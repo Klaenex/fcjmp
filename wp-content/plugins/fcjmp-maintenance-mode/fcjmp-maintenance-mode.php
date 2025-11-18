@@ -4,7 +4,7 @@
  * Plugin Name: FCJMP Maintenance Mode
  * Description: Mode maintenance avec whitelist utilisateurs, planification, barre admin, prévisualisation dans l’admin. Réglages réservés aux administrateurs.
  * Version:     3.2.0
- * Author:      FCJMP
+ * Author:      Vincent C.
  */
 
 if (!defined('ABSPATH')) {

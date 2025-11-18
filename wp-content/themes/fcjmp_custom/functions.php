@@ -115,3 +115,27 @@ add_filter('im_force_enqueue_assets', function ($force, $post) {
     }
     return $force;
 }, 10, 2);
+
+// =======================
+// ENQUEUE SCRIPTS POUR LA PAGE MEMBRES
+function fcjmp_enqueue_members_script()
+{
+    // On ne charge le script que sur le template des membres
+    if (!is_page_template('page-membres.php')) { // adapte le nom du fichier
+        return;
+    }
+
+    wp_enqueue_script(
+        'fcjmp-members',
+        get_template_directory_uri() . '/assets/js/members.js',
+        [],
+        '1.0.0',
+        true
+    );
+
+    wp_localize_script('fcjmp-members', 'fcjmpMembers', [
+        'endpoint'            => rest_url('fcjmp/v1/members'),
+        'templateDirectoryUri' => get_template_directory_uri(),
+    ]);
+}
+add_action('wp_enqueue_scripts', 'fcjmp_enqueue_members_script');

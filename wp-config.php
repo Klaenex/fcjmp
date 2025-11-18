@@ -85,6 +85,9 @@ define('WP_DEBUG', false);
 /* Add any custom values between this line and the "stop editing" line. */
 define('WP_ENVIRONMENT_TYPE', 'development');
 
+define('MONDAY_API_KEY', 'eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjQ3NzU4MTY2MywiYWFpIjoxMSwidWlkIjo1MDAxODIzMywiaWFkIjoiMjAyNS0wMi0yNVQxNToyMDo0NC40MDZaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6OTc5OTU0OSwicmduIjoidXNlMSJ9.Sot7SoKk7DaQS5DAOiFz7sxegZcBO8rm_d9MBeGPC04');
+define('API_MAPS', 'AIzaSyBdGWiRBBvwnl-9DHpekSiEdDhxih0X_rg');
+
 /* That's all, stop editing! Happy publishing. */
 
 

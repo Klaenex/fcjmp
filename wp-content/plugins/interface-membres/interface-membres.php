@@ -4,7 +4,7 @@
  * Plugin Name: Interface Membres (React)
  * Description: Espace membre React permettant de soumettre et modérer plusieurs types de contenus (Articles, Offres d’emplois, Activités).
  * Version:     1.0.0
- * Author:      Votre Nom
+ * Author:      Vincent C.
  * Text Domain: interface-membres
  */
 
