@@ -93,39 +93,59 @@ document.addEventListener("DOMContentLoaded", function () {
         `${templateDirectoryUri}/assets/img/default-avatar.svg`;
 
       listItem.innerHTML = `
-                <span class="card-member-header">
-                    <img src="${avatarSrc}" alt="Photo de ${member.name}" />
-                    <h3>${member.name}</h3>
-                </span>
-                <span class="card-member-body">
-                    ${
-                      member.phone
-                        ? `<p>Téléphone : <a href="tel:${member.phone}">${member.phone}</a></p>`
-                        : `<p>Téléphone : N/A</p>`
-                    }
-                    ${
-                      member.location
-                        ? `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                            member.location
-                          )}"
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  aria-label="Ouvrir l'adresse de ${
-                                    member.name
-                                  } dans Google Maps">
-                                   <img src="${templateDirectoryUri}/assets/img/maps.svg" alt="Google Maps" />
-                               </a>`
-                        : ""
-                    }
-                    ${
-                      member.email
-                        ? `<a href="mailto:${member.email}" aria-label="Envoyer un mail à ${member.name}">
-                                   <img src="${templateDirectoryUri}/assets/img/mail.svg" alt="Envoyer un mail" />
-                               </a>`
-                        : ""
-                    }
-                </span>
-            `;
+        <span class="card-member-header">
+          <img src="${avatarSrc}" alt="Photo de ${member.name}" />
+          <h3>${member.name}</h3>
+        </span>
+        <span class="card-member-body">
+          ${
+            member.phone
+              ? `<p>Téléphone : <a href="tel:${member.phone}">${member.phone}</a></p>`
+              : `<p>Téléphone : N/A</p>`
+          }
+          ${
+            member.location
+              ? `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                  member.location
+                )}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Ouvrir l'adresse de ${
+                      member.name
+                    } dans Google Maps">
+                    <img src="${templateDirectoryUri}/assets/img/maps.svg" class="icon" alt="Google Maps" />
+                 </a>`
+              : ""
+          }
+          ${
+            member.email
+              ? `<a href="mailto:${member.email}" aria-label="Envoyer un mail à ${member.name}">
+                    <img src="${templateDirectoryUri}/assets/img/mail.svg" class="icon" alt="Envoyer un mail" />
+                 </a>`
+              : ""
+          }
+          ${
+            member.site1
+              ? `<a href="${member.site1}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Page Facebook de ${member.name}">
+                    <img src="${templateDirectoryUri}/assets/img/instagram.svg" class="icon" alt="Facebook" />
+                 </a>`
+              : ""
+          }
+          ${
+            member.site2
+              ? `<a href="${member.site2}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Page Instagram de ${member.name}">
+                    <img src="${templateDirectoryUri}/assets/img/facebook.svg" class="icon" alt="Instagram" />
+                 </a>`
+              : ""
+          }
+        </span>
+      `;
 
       list.appendChild(listItem);
     });
