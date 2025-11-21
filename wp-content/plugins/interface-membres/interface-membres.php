@@ -611,6 +611,34 @@ final class IM_Interface_Membres
         }
         return $redirect_to;
     }
+
+    /**
+     * Assure le chargement de l'éditeur et du plugin wplink pour le CPT "offres"
+     * (à placer DANS la classe IM_Interface_Membres)
+     */
+    public function admin_enqueue_editor_scripts($hook)
+    {
+        if (! function_exists('get_current_screen')) return;
+
+        $screen = get_current_screen();
+        if (! $screen) return;
+
+        // Ne charger que pour l'écran d'édition du CPT "offres"
+        if ($screen->post_type !== self::CPT_OFFRES) return;
+
+        // Charge l'éditeur Wordpress (TinyMCE + dépendances)
+        if (function_exists('wp_enqueue_editor')) {
+            wp_enqueue_editor();
+        }
+
+        // Assure le plugin wplink + color picker
+        wp_enqueue_script('wplink');
+        wp_enqueue_style('wp-color-picker');
+        wp_enqueue_script('wp-color-picker');
+    }
 }
+
+
+
 
 new IM_Interface_Membres();
