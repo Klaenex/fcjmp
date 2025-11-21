@@ -1,7 +1,6 @@
 import { cfg, getRestBaseFor } from "../config";
 import { v2, custom, wpFetch } from "./http";
 
-/** Créer un contenu (post/CPT) */
 export async function createItem(type, { title, content, meta, status }) {
   const restBase = getRestBaseFor(type);
   return wpFetch(v2(restBase), {
@@ -10,12 +9,6 @@ export async function createItem(type, { title, content, meta, status }) {
   });
 }
 
-/**
- * Créer une "Offre" (CPT: offres)
- * Compatible avec deux payloads:
- *  - { title, content, meta, status }
- *  - { titre, contenu, meta, status }
- */
 export async function createOffre(payload) {
   const title = payload?.title ?? payload?.titre ?? "";
   const content = payload?.content ?? payload?.contenu ?? "";
@@ -24,7 +17,6 @@ export async function createOffre(payload) {
   return createItem("offres", { title, content, meta, status });
 }
 
-/** Lister MES contenus pour un type donné */
 export async function listMine(
   type,
   {
@@ -53,7 +45,6 @@ export async function listMine(
   return wpFetch(v2(restBase, "?" + params.toString()));
 }
 
-/** Lister les contenus en attente (modération) */
 export async function listPending(type, { page = 1, perPage = 10 } = {}) {
   const restBase = getRestBaseFor(type);
   const params = new URLSearchParams({
@@ -67,7 +58,6 @@ export async function listPending(type, { page = 1, perPage = 10 } = {}) {
   return wpFetch(v2(restBase, "?" + params));
 }
 
-/** Actions de modération (routes custom) */
 export async function acceptItem(type, id) {
   return wpFetch(
     custom(`moderation/${encodeURIComponent(type)}/${id}/accept`),
@@ -85,25 +75,13 @@ export async function rejectItem(type, id) {
   );
 }
 
-/* ================================
-   Wrappers spécifiques au CPT "offres"
-   (compatibles avec ModerationOffres.jsx)
-   ================================ */
-
-/** Liste des offres en attente (sans passer le type à chaque fois) */
+// Wrappers pour "offres"
 export async function listOffresPending({ page = 1, perPage = 10 } = {}) {
   return listPending("offres", { page, perPage });
 }
-
-/** Accepter une offre */
 export async function accepterOffre(id) {
   return acceptItem("offres", id);
 }
-
-/** Rejeter une offre */
 export async function rejeterOffre(id) {
   return rejectItem("offres", id);
 }
-
-// Alias optionnel si tu veux garder des imports existants ailleurs
-export { createItem as createPostGeneric };

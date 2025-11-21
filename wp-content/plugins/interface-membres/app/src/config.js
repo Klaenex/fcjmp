@@ -1,21 +1,18 @@
+const globalCfg = window?.IMAppConfig || {};
 export const cfg = {
-  apiBase: window?.fcjmpApiBase || "/wp-json",
-  nonce: window?.fcjmpNonce || "",
-  currentUser: window?.fcjmpCurrentUser || { id: 0 },
-  // Ajout d’un mapping de statuts pour éviter cfg.status.undefined
-  status: {
+  apiBase: (globalCfg.restUrl || "/wp-json").replace(/\/$/, ""),
+  nonce: globalCfg.nonce || "",
+  currentUser: globalCfg.currentUser || { id: 0 },
+  status: globalCfg.status || {
     pending: "pending",
     draft: "draft",
     publish: "publish",
     rejected: "rejected",
   },
+  restNamespace: globalCfg.restNamespace || "im/v1",
 };
 
 export function getRestBaseFor(type) {
-  const map = {
-    offres: "offres",
-    posts: "posts",
-    pages: "pages",
-  };
+  const map = { offres: "offres", posts: "posts", pages: "pages" };
   return map[type] || type;
 }

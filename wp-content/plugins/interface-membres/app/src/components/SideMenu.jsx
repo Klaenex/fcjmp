@@ -1,55 +1,33 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import { cfg } from "../config";
 
-export default function SideMenu({ current, onChange }) {
+export default function SideMenu() {
   const canModerateOffres = !!(
     cfg.types?.offres?.caps?.can_publish ||
     cfg.types?.offres?.caps?.can_edit_others
   );
+  const linkClass = ({ isActive }) => `im-sidelink ${isActive ? "active" : ""}`;
 
   return (
     <aside className="im-sidebar">
       <div className="im-sidelogo">
         <strong>Mon espace</strong>
       </div>
-
       <div className="im-sidegroup">
-        <button
-          className={`im-sidelink ${current === "add-offre" ? "active" : ""}`}
-          onClick={() => onChange("add-offre")}
-          type="button"
-        >
+        <NavLink to="/add-offre" className={linkClass} end>
           ➕ Ajouter une offre
-        </button>
-
-        <button
-          className={`im-sidelink ${
-            current === "add-activite" ? "active" : ""
-          }`}
-          onClick={() => onChange("add-activite")}
-          type="button"
-        >
+        </NavLink>
+        <NavLink to="/add-activite" className={linkClass}>
           ➕ Ajouter une activité
-        </button>
-
-        <button
-          className={`im-sidelink ${current === "listing" ? "active" : ""}`}
-          onClick={() => onChange("listing")}
-          type="button"
-        >
+        </NavLink>
+        <NavLink to="/listing" className={linkClass}>
           📄 Listing (mes contenus)
-        </button>
-
+        </NavLink>
         {canModerateOffres && (
-          <button
-            className={`im-sidelink ${
-              current === "moderation-offres" ? "active" : ""
-            }`}
-            onClick={() => onChange("moderation-offres")}
-            type="button"
-          >
+          <NavLink to="/moderation-offres" className={linkClass}>
             ✅ Modération offres
-          </button>
+          </NavLink>
         )}
       </div>
     </aside>

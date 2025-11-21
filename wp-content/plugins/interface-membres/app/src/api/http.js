@@ -1,11 +1,11 @@
 import { cfg } from "../config";
 
-// Nettoie le trailing slash pour éviter //wp/v2
+// Nettoie trailing slash
 const base = (cfg.apiBase || "/wp-json").replace(/\/$/, "");
 
 export const v2 = (path, query = "") => `${base}/wp/v2/${path}${query || ""}`;
 export const custom = (path, query = "") =>
-  `${base}/fcjmp/v1/${path}${query || ""}`;
+  `${base}/${cfg.restNamespace}/${path}${query || ""}`;
 
 export async function wpFetch(url, options = {}) {
   const res = await fetch(url, {

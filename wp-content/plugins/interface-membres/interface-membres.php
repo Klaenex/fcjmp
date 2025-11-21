@@ -18,6 +18,7 @@ final class IM_Interface_Membres
     const CPT_OFFRES      = 'offres';
     const CPT_ACTIVITES   = 'activites';
     const STATUS_REJECTED = 'rejected';
+    const STATUS_EXPIRED  = 'expired';
     const SHORTCODE       = 'interface_membres';
     const HANDLE          = 'interface-membres-app';
     const REST_NS         = 'im/v1';
@@ -49,6 +50,8 @@ final class IM_Interface_Membres
 
         add_action('init',                    [$this, 'register_cpts']);
         add_action('init',                    [$this, 'register_rejected_status']);
+        add_action('init',                    [$this, 'register_expired_status']);
+        add_action('init',                    [$this, 'register_meta']);
         add_action('init',                    [$this, 'ensure_role_caps']);
         add_filter('display_post_states',     [$this, 'show_custom_status_label'], 10, 2);
 
@@ -56,6 +59,9 @@ final class IM_Interface_Membres
         add_action('wp_enqueue_scripts',      [$this, 'maybe_enqueue_assets']);
 
         add_action('rest_api_init',           [$this, 'register_rest_routes']);
+
+        // Cron pour expiration
+        add_action('im_expire_offres_daily',  [$this, 'process_expired_offres']);
 
         // 🔒 Verrouillage wp-admin pour les membres
         add_action('admin_init',              [$this, 'block_admin_for_members'], 1);
@@ -70,11 +76,23 @@ final class IM_Interface_Membres
         $this->ensure_role_caps();
         $this->register_cpts();
         $this->register_rejected_status();
+        $this->register_expired_status();
+        $this->register_meta();
         flush_rewrite_rules();
+
+        // schedule daily event for expiration
+        if (! wp_next_scheduled('im_expire_offres_daily')) {
+            wp_schedule_event(time(), 'daily', 'im_expire_offres_daily');
+        }
     }
 
     public function on_deactivate()
     {
+        // unschedule event
+        $timestamp = wp_next_scheduled('im_expire_offres_daily');
+        if ($timestamp) {
+            wp_unschedule_event($timestamp, 'im_expire_offres_daily');
+        }
         flush_rewrite_rules();
     }
 
@@ -104,13 +122,20 @@ final class IM_Interface_Membres
             }
         }
 
+        // Capacities for 'offres' CPT - members can create/edit but not publish by default
         $offres_caps = [
-            'edit_offre'              => true,
-            'read_offre'              => true,
-            'delete_offre'            => false,
-            'edit_offres'             => true,
-            'edit_others_offres'      => false,
-            'publish_offres'          => false,
+            'read_offre'                => true,
+            'edit_offre'                => true,
+            'delete_offre'              => false,
+            'edit_offres'               => true,
+            'edit_others_offres'        => false,
+            'publish_offres'            => false,
+            'create_offres'             => true,
+            'edit_published_offres'     => true,
+            'delete_offres'             => false,
+            'delete_others_offres'      => false,
+            'delete_published_offres'   => false,
+            'read_private_offres'       => false,
         ];
         if ($role) {
             foreach ($offres_caps as $k => $v) {
@@ -118,17 +143,62 @@ final class IM_Interface_Membres
             }
         }
 
+        // Capacities for 'activites' CPT
         $activites_caps = [
-            'edit_activite'              => true,
-            'read_activite'              => true,
-            'delete_activite'            => false,
-            'edit_activites'             => true,
-            'edit_others_activites'      => false,
-            'publish_activites'          => false,
+            'read_activite'                => true,
+            'edit_activite'                => true,
+            'delete_activite'              => false,
+            'edit_activites'               => true,
+            'edit_others_activites'        => false,
+            'publish_activites'            => false,
+            'create_activites'             => true,
+            'edit_published_activites'     => true,
+            'delete_activites'             => false,
+            'delete_others_activites'      => false,
+            'delete_published_activites'   => false,
+            'read_private_activites'       => false,
         ];
         if ($role) {
             foreach ($activites_caps as $k => $v) {
                 $v ? $role->add_cap($k) : $role->remove_cap($k);
+            }
+        }
+
+        // Ensure admins & editors have all needed caps (including publish)
+        $roles_to_grant = ['administrator', 'editor'];
+        $admin_caps = [
+            // Offres caps (including publish)
+            'read_offre',
+            'edit_offre',
+            'delete_offre',
+            'edit_offres',
+            'edit_others_offres',
+            'publish_offres',
+            'create_offres',
+            'edit_published_offres',
+            'delete_offres',
+            'delete_others_offres',
+            'delete_published_offres',
+            'read_private_offres',
+            // Activites caps
+            'read_activite',
+            'edit_activite',
+            'delete_activite',
+            'edit_activites',
+            'edit_others_activites',
+            'publish_activites',
+            'create_activites',
+            'edit_published_activites',
+            'delete_activites',
+            'delete_others_activites',
+            'delete_published_activites',
+            'read_private_activites',
+        ];
+        foreach ($roles_to_grant as $rname) {
+            $r = get_role($rname);
+            if (!$r) continue;
+            foreach ($admin_caps as $cap) {
+                if (!$r->has_cap($cap)) $r->add_cap($cap);
             }
         }
     }
@@ -153,6 +223,17 @@ final class IM_Interface_Membres
             'rest_base'    => self::CPT_OFFRES,
             'map_meta_cap' => true,
             'capability_type' => ['offre', 'offres'],
+            'capabilities' => [
+                'edit_post'           => 'edit_offre',
+                'read_post'           => 'read_offre',
+                'delete_post'         => 'delete_offre',
+                'edit_posts'          => 'edit_offres',
+                'edit_others_posts'   => 'edit_others_offres',
+                'publish_posts'       => 'publish_offres',
+                'read_private_posts'  => 'read_private_offres',
+                'create_posts'        => 'create_offres',
+                'delete_posts'        => 'delete_offres',
+            ],
         ]);
 
         // CPT Activités
@@ -171,9 +252,19 @@ final class IM_Interface_Membres
             'rest_base'    => self::CPT_ACTIVITES,
             'map_meta_cap' => true,
             'capability_type' => ['activite', 'activites'],
+            'capabilities' => [
+                'edit_post'           => 'edit_activite',
+                'read_post'           => 'read_activite',
+                'delete_post'         => 'delete_activite',
+                'edit_posts'          => 'edit_activites',
+                'edit_others_posts'   => 'edit_others_activites',
+                'publish_posts'       => 'publish_activites',
+                'read_private_posts'  => 'read_private_activites',
+                'create_posts'        => 'create_activites',
+                'delete_posts'        => 'delete_activites',
+            ],
         ]);
     }
-
 
     public function register_rejected_status()
     {
@@ -186,12 +277,60 @@ final class IM_Interface_Membres
         ]);
     }
 
+    public function register_expired_status()
+    {
+        register_post_status(self::STATUS_EXPIRED, [
+            'label'                     => _x('Expiré', 'post status', 'interface-membres'),
+            'public'                    => false,
+            'show_in_admin_status_list' => true,
+            'show_in_rest'              => true,
+            'label_count'               => _n_noop('Expiré <span class="count">(%s)</span>', 'Expirés <span class="count">(%s)</span>', 'interface-membres'),
+        ]);
+    }
+
     public function show_custom_status_label($states, $post)
     {
         if ($post->post_status === self::STATUS_REJECTED) {
             $states['rejected'] = __('Rejeté', 'interface-membres');
         }
+        if ($post->post_status === self::STATUS_EXPIRED) {
+            $states['expired'] = __('Expiré', 'interface-membres');
+        }
         return $states;
+    }
+
+    /* ---------------- Register meta ---------------- */
+
+    public function register_meta()
+    {
+        $meta_keys = [
+            'im_off_type',
+            'im_off_type_prec',
+            'im_off_regime',
+            'im_off_regime_prec',
+            'im_off_zone',
+            'im_off_lieu_prec',
+            'im_off_desc_asbl',
+            'im_off_desc_poste',
+            'im_off_missions',
+            'im_off_qualifs',
+            'im_off_competences',
+            'im_off_conditions',
+            'im_off_infos',
+            'im_off_candidature_url',
+            'im_off_candidature_email',
+            'im_off_candidature_tel',
+            'im_off_date_limite'
+        ];
+
+        foreach ($meta_keys as $key) {
+            register_post_meta(self::CPT_OFFRES, $key, [
+                'single' => true,
+                'show_in_rest' => true,
+                'type' => 'string',
+                'sanitize_callback' => 'sanitize_text_field',
+            ]);
+        }
     }
 
     /* ---------------- Shortcode & Assets React ---------------- */
@@ -269,21 +408,23 @@ final class IM_Interface_Membres
         }
 
         wp_localize_script(self::HANDLE, 'IMAppConfig', [
-            'restUrl'     => esc_url_raw(rest_url()),
-            'nonce'       => wp_create_nonce('wp_rest'),
-            'currentUser' => [
+            'restUrl'      => esc_url_raw(rest_url()),
+            'nonce'        => wp_create_nonce('wp_rest'),
+            'currentUser'  => [
                 'id'    => $current_user->ID,
                 'name'  => $current_user->display_name,
                 'roles' => $current_user->roles,
             ],
-            'status'      => [
+            'status'       => [
                 'draft'    => 'draft',
                 'pending'  => 'pending',
                 'publish'  => 'publish',
                 'rejected' => self::STATUS_REJECTED,
+                'expired'  => self::STATUS_EXPIRED,
             ],
-            'types'       => $types,
-            'siteUrl'     => home_url('/'),
+            'types'        => $types,
+            'siteUrl'      => home_url('/'),
+            'restNamespace' => self::REST_NS,
         ]);
     }
 
@@ -301,6 +442,81 @@ final class IM_Interface_Membres
             'permission_callback' => fn($req) => current_user_can($this->get_publish_cap_for_type($req['type'])),
             'callback'            => fn($req) => $this->moderate($req['type'], (int)$req['id'], self::STATUS_REJECTED),
         ]);
+
+        // Endpoint pour la soumission (utilisé par les membres)
+        register_rest_route(self::REST_NS, '/submit', [
+            'methods' => 'POST',
+            'permission_callback' => function () {
+                return is_user_logged_in() && current_user_can('create_offres');
+            },
+            'callback' => [$this, 'rest_submit_offre'],
+        ]);
+    }
+
+    public function rest_submit_offre(\WP_REST_Request $req)
+    {
+        $user = wp_get_current_user();
+        if (!$user || !$user->ID) {
+            return new \WP_Error('not_logged', 'Utilisateur non connecté', ['status' => 401]);
+        }
+
+        $params = $req->get_json_params();
+        if (!is_array($params)) $params = [];
+
+        // sanitize
+        $title = sanitize_text_field($params['title'] ?? '');
+        $content = isset($params['content']) ? wp_kses_post($params['content']) : '';
+        $meta = is_array($params['meta'] ?? null) ? $params['meta'] : [];
+
+        // Force author and status
+        $postarr = [
+            'post_title'   => $title ?: '(Sans titre)',
+            'post_content' => $content,
+            'post_type'    => self::CPT_OFFRES,
+            'post_status'  => 'pending',
+            'post_author'  => $user->ID,
+        ];
+
+        $post_id = wp_insert_post($postarr, true);
+        if (is_wp_error($post_id)) {
+            return $post_id;
+        }
+
+        // allowed meta keys
+        $allowed_meta = [
+            'im_off_type',
+            'im_off_type_prec',
+            'im_off_regime',
+            'im_off_regime_prec',
+            'im_off_zone',
+            'im_off_lieu_prec',
+            'im_off_desc_asbl',
+            'im_off_desc_poste',
+            'im_off_missions',
+            'im_off_qualifs',
+            'im_off_competences',
+            'im_off_conditions',
+            'im_off_infos',
+            'im_off_candidature_url',
+            'im_off_candidature_email',
+            'im_off_candidature_tel',
+            'im_off_date_limite'
+        ];
+
+        foreach ($allowed_meta as $key) {
+            if (isset($meta[$key])) {
+                $value = $meta[$key];
+                if ($key === 'im_off_candidature_email') {
+                    update_post_meta($post_id, $key, sanitize_email($value));
+                } elseif ($key === 'im_off_candidature_url') {
+                    update_post_meta($post_id, $key, esc_url_raw($value));
+                } else {
+                    update_post_meta($post_id, $key, sanitize_text_field($value));
+                }
+            }
+        }
+
+        return rest_ensure_response(['ok' => true, 'id' => $post_id]);
     }
 
     private function moderate($type, $id, $status)
@@ -323,6 +539,44 @@ final class IM_Interface_Membres
         };
     }
 
+    /* ---------------- Process expired offres ---------------- */
+
+    public function process_expired_offres()
+    {
+        $today = current_time('Y-m-d'); // WP timezone-aware
+
+        $args = [
+            'post_type'      => self::CPT_OFFRES,
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+            'fields'         => 'ids',
+            'meta_query'     => [
+                [
+                    'key'     => 'im_off_date_limite',
+                    'value'   => $today,
+                    'compare' => '<=',
+                    'type'    => 'DATE',
+                ],
+            ],
+        ];
+
+        $q = new WP_Query($args);
+        if (empty($q->posts)) {
+            return;
+        }
+
+        foreach ($q->posts as $post_id) {
+            $date = get_post_meta($post_id, 'im_off_date_limite', true);
+            if (! $date) continue;
+            $d = date_create_from_format('Y-m-d', $date);
+            if (! $d) continue;
+            $d_str = $d->format('Y-m-d');
+            if ($d_str <= $today) {
+                wp_update_post(['ID' => $post_id, 'post_status' => self::STATUS_EXPIRED]);
+                error_log("[Interface Membres] Offre #{$post_id} expirée ({$date}).");
+            }
+        }
+    }
 
     /* ---------------- Restrictions wp-admin ---------------- */
 
